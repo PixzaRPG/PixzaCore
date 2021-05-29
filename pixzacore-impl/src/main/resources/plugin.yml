@@ -1,0 +1,5 @@
+name: PixzaCore
+description: Core RPG plugin that handles loading Pixza data packs
+version: 1.0.0
+main: io.github.pixzarpg.core.RPGPlugin
+author: William Qi

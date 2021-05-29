@@ -1,0 +1,11 @@
+PixzaCore
+=========
+A plugin that replicates an RPG like world
+
+- Regions
+- Quests
+- Classes
+- Combat
+- Entities
+- DataPacks
+- Crafting/Blacksmithing
