@@ -9,7 +9,10 @@ public class RPGPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.manager = new RPGManager(this);
+        this.saveDefaultConfig();
+        RPGConfig config = new RPGConfig(this.getConfig());
+
+        this.manager = new RPGManager(config, this);
     }
 
     @Override
