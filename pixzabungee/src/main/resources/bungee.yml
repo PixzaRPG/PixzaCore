@@ -1,0 +1,5 @@
+name: PixzaBungee
+main: io.github.pixzarpg.core.bungee.PixzaBungee
+description: Load balancing plugin for the PixzaRPG project
+version: 1.0.0
+author: William Qi
