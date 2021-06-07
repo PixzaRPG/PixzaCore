@@ -1,13 +1,15 @@
 package io.github.pixzarpg.core.impl;
 
 import io.github.pixzarpg.core.api.APIRPGManager;
+import io.github.pixzarpg.core.api.datapacks.APIDataPackManager;
+import io.github.pixzarpg.core.api.world.APIWorldManager;
 import io.github.pixzarpg.core.impl.datapacks.DataPackManager;
 import io.github.pixzarpg.core.impl.world.WorldManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class RPGManager implements APIRPGManager {
+public class RPGManager implements APIRPGManager<JavaPlugin> {
 
-    private final DataPackManager dataPackManager = new DataPackManager(this);
+    private final APIDataPackManager dataPackManager = new DataPackManager(this);
     private final WorldManager worldManager = new WorldManager(this);
 
     private final RPGConfig config;
@@ -26,12 +28,19 @@ public class RPGManager implements APIRPGManager {
         return this.config;
     }
 
-    public DataPackManager getDataPackManager() {
-        return this.dataPackManager;
-    }
-
+    @Override
     public JavaPlugin getPlugin() {
         return this.plugin;
+    }
+
+    @Override
+    public APIWorldManager getWorldManager() {
+        return this.worldManager;
+    }
+
+    @Override
+    public APIDataPackManager getDataPackManager() {
+        return this.dataPackManager;
     }
 
     @Override
