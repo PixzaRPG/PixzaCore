@@ -1,0 +1,2 @@
+# a float between 0 to 1 that describes the ideal percentage of players you want on each game server
+server_target_capacity: 0.8
