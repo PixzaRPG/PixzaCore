@@ -4,17 +4,12 @@ import io.github.pixzarpg.core.bungee.PixzaBungee;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.event.ServerConnectEvent;
-import net.md_5.bungee.api.event.ServerKickEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.Tuple;
 
-import java.util.LinkedHashSet;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class LoadBalancer implements Listener {
 
@@ -51,11 +46,6 @@ public class LoadBalancer implements Listener {
             event.getPlayer().disconnect(new TextComponent("Sorry, there was no available server found. Please try again later."));
             event.setCancelled(true);
         }
-    }
-
-    @EventHandler
-    public void onPlayerKick(ServerKickEvent event) {
-        // TODO: migrate to another server if kick was a restart or shutdown
     }
 
     private ServerInfo getRecommendedServer() {
