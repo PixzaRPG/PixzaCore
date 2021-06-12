@@ -1,4 +1,4 @@
-package io.github.pixzarpg.core.bungee.load;
+package io.github.pixzarpg.core.loadbalancing.bungee.load;
 
 import org.junit.jupiter.api.Test;
 import redis.clients.jedis.Tuple;
