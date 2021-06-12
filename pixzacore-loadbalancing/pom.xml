@@ -16,6 +16,7 @@
 
     <modules>
         <module>bungee</module>
+        <module>spigot</module>
     </modules>
 
     <properties>
