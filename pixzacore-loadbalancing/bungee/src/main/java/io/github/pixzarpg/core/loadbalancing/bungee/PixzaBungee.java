@@ -1,6 +1,6 @@
-package io.github.pixzarpg.core.bungee;
+package io.github.pixzarpg.core.loadbalancing.bungee;
 
-import io.github.pixzarpg.core.bungee.load.LoadBalancer;
+import io.github.pixzarpg.core.loadbalancing.bungee.load.LoadBalancer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;

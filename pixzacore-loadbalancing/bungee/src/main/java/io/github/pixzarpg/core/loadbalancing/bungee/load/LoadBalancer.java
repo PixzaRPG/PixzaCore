@@ -1,6 +1,6 @@
-package io.github.pixzarpg.core.bungee.load;
+package io.github.pixzarpg.core.loadbalancing.bungee.load;
 
-import io.github.pixzarpg.core.bungee.PixzaBungee;
+import io.github.pixzarpg.core.loadbalancing.bungee.PixzaBungee;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.event.ServerConnectEvent;
