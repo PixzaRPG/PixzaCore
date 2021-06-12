@@ -2,12 +2,12 @@ package io.github.pixzarpg.core.loadbalancing.bungee;
 
 import net.md_5.bungee.config.Configuration;
 
-public class PixzaBungeeConfig {
+public class BungeeLoadBalancerConfig {
 
     private final Configuration config;
 
 
-    public PixzaBungeeConfig(Configuration config) {
+    public BungeeLoadBalancerConfig(Configuration config) {
         this.config = config;
     }
 

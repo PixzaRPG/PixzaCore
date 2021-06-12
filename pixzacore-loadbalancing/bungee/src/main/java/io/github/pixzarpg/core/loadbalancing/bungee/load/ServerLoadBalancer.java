@@ -1,6 +1,6 @@
 package io.github.pixzarpg.core.loadbalancing.bungee.load;
 
-import io.github.pixzarpg.core.loadbalancing.bungee.PixzaBungee;
+import io.github.pixzarpg.core.loadbalancing.bungee.BungeeLoadBalancer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.event.ServerConnectEvent;
@@ -11,16 +11,16 @@ import redis.clients.jedis.JedisPool;
 
 import java.util.Optional;
 
-public class LoadBalancer implements Listener {
+public class ServerLoadBalancer implements Listener {
 
     // Key that stores load of all servers
     private final static String REDIS_SERVER_KEY = "pizzabungee_server_load";
 
-    private final PixzaBungee bungee;
+    private final BungeeLoadBalancer bungee;
     private final JedisPool connectionPool;
 
 
-    public LoadBalancer(PixzaBungee bungee) {
+    public ServerLoadBalancer(BungeeLoadBalancer bungee) {
         this.bungee = bungee;
 
         this.connectionPool = new JedisPool(

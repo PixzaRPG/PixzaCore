@@ -1,6 +1,6 @@
 package io.github.pixzarpg.core.loadbalancing.bungee;
 
-import io.github.pixzarpg.core.loadbalancing.bungee.load.LoadBalancer;
+import io.github.pixzarpg.core.loadbalancing.bungee.load.ServerLoadBalancer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
@@ -10,10 +10,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.logging.Level;
 
-public class PixzaBungee extends Plugin {
+public class BungeeLoadBalancer extends Plugin {
 
-    private PixzaBungeeConfig config;
-    private LoadBalancer loadBalancer;
+    private BungeeLoadBalancerConfig config;
+    private ServerLoadBalancer loadBalancer;
 
 
     @Override
@@ -29,11 +29,11 @@ public class PixzaBungee extends Plugin {
             return;
         }
 
-        this.loadBalancer = new LoadBalancer(this);
+        this.loadBalancer = new ServerLoadBalancer(this);
 
     }
 
-    public PixzaBungeeConfig getConfig() {
+    public BungeeLoadBalancerConfig getConfig() {
         return this.config;
     }
 
@@ -49,7 +49,7 @@ public class PixzaBungee extends Plugin {
         if (!configFile.exists()) {
             Files.copy(this.getResourceAsStream("config.yml"), configFile.toPath());
         }
-        this.config = new PixzaBungeeConfig(ConfigurationProvider.getProvider(YamlConfiguration.class).load(configFile));
+        this.config = new BungeeLoadBalancerConfig(ConfigurationProvider.getProvider(YamlConfiguration.class).load(configFile));
     }
 
 }
