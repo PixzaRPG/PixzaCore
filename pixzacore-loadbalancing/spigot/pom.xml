@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.pixzarpg.core.loadbalancing.spigot</groupId>
-    <artifactId>PixzaCore-Spigot</artifactId>
+    <artifactId>PixzaCore-Spigot-LoadBalancing</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

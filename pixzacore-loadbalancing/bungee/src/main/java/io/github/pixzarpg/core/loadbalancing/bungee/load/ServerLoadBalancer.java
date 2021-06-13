@@ -48,7 +48,13 @@ public class ServerLoadBalancer extends Thread {
                     switch (channel) {
                         case REDIS_PLAYER_COUNT_CHANNEL:
                             ServerLoadResponse response = GSON.fromJson(message, ServerLoadResponse.class);
-                            ServerLoadBalancer.this.currentPlayerCounts.put(response.getServerId(), response);
+                            if (response.getSpacity() != -1) {
+                                // update player count
+                                ServerLoadBalancer.this.currentPlayerCounts.put(response.getServerId(), response);
+                            } else {
+                                // game server is going down
+                                ServerLoadBalancer.this.currentPlayerCounts.remove(response.getServerId());
+                            }
                             break;
                         case REDIS_SUB_SHUTDOWN_CHANNEL:
                             // This load balancer is being shutdown, stop listening.
