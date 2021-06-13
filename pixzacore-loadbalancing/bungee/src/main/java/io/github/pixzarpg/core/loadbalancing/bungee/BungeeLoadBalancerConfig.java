@@ -11,8 +11,8 @@ public class BungeeLoadBalancerConfig {
         this.config = config;
     }
 
-    public float getTargetGameServerCapacity() {
-        return this.config.getFloat("server_target_capacity");
+    public double getTargetGameServerCapacity() {
+        return this.config.getDouble("server_target_capacity");
     }
 
     public String getRedisHost() {

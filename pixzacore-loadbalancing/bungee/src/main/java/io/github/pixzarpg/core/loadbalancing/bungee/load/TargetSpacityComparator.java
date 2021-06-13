@@ -1,29 +1,28 @@
 package io.github.pixzarpg.core.loadbalancing.bungee.load;
 
-import redis.clients.jedis.Tuple;
-
 import java.util.Comparator;
+import java.util.Map;
 
-public class TargetSpacityComparator implements Comparator<Tuple> {
+public class TargetSpacityComparator implements Comparator<Map.Entry<String, Double>> {
 
     /**
      * float between 0-1 that describes how full servers should be
      */
-    private final float targetSpacity;
+    private final double targetSpacity;
 
-    public TargetSpacityComparator(float targetSpacity) {
+    public TargetSpacityComparator(double targetSpacity) {
         this.targetSpacity = targetSpacity;
     }
 
     @Override
-    public int compare(Tuple serverA, Tuple serverB) {
+    public int compare(Map.Entry<String, Double> serverA, Map.Entry<String, Double> serverB) {
         // In the case that both servers exceed the target space desired
-        if (serverA.getScore() >= targetSpacity && serverB.getScore() >= targetSpacity) {
+        if (serverA.getValue() >= targetSpacity && serverB.getValue() >= targetSpacity) {
             // Sort it by which server is the least full
-            if (serverA.getScore() == serverB.getScore()) {
+            if (serverA.getValue() == serverB.getValue()) {
                 // either or is okay
                 return 0;
-            } else if (serverA.getScore() > serverB.getScore()) {
+            } else if (serverA.getValue() > serverB.getValue()) {
                 // serverB is the better choice
                 return 1;
             } else {
@@ -33,17 +32,17 @@ public class TargetSpacityComparator implements Comparator<Tuple> {
         }
 
         // In the case that only one of the servers are above the spacity, go for the other server
-        if (serverA.getScore() >= targetSpacity) {
+        if (serverA.getValue() >= targetSpacity) {
             // serverB is the better choice
             return 1;
-        } else if (serverB.getScore() >= targetSpacity) {
+        } else if (serverB.getValue() >= targetSpacity) {
             // serverA is the better choice
             return -1;
         }
 
         // Sort by which is the closest to the target spacity.
-        float distanceA = this.targetSpacity - (float)serverA.getScore();
-        float distanceB = this.targetSpacity - (float)serverB.getScore();
+        double distanceA = this.targetSpacity - serverA.getValue();
+        double distanceB = this.targetSpacity - serverB.getValue();
 
         if (distanceA == distanceB) {
             // either or is okay

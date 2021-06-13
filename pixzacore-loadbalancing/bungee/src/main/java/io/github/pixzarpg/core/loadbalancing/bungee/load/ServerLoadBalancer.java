@@ -1,23 +1,27 @@
 package io.github.pixzarpg.core.loadbalancing.bungee.load;
 
 import io.github.pixzarpg.core.loadbalancing.bungee.BungeeLoadBalancer;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.event.ServerConnectEvent;
-import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.event.EventHandler;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class ServerLoadBalancer implements Listener {
+public class ServerLoadBalancer extends Thread {
 
-    // Key that stores load of all servers
-    private final static String REDIS_SERVER_KEY = "pizzabungee_server_load";
+    // Broadcasts all player counts for servers
+    private final static String REDIS_PLAYER_COUNT_CHANNEL = "pixza_loadbalancing_playercount";
+
+    // Used to shutdown a bungee's subscribe listener
+    private final static String REDIS_SUB_SHUTDOWN_CHANNEL = "pixza_loadbalancing_sub_shutdown";
 
     private final BungeeLoadBalancer bungee;
     private final JedisPool connectionPool;
+
+    private final Map<String, Double> currentPlayerCounts = new ConcurrentHashMap<>();
 
 
     public ServerLoadBalancer(BungeeLoadBalancer bungee) {
@@ -28,42 +32,25 @@ public class ServerLoadBalancer implements Listener {
                 this.bungee.getConfig().getRedisPort(),
                 this.bungee.getConfig().getRedisUsername(),
                 this.bungee.getConfig().getRedisPassword());
-
-        bungee.getProxy().getPluginManager().registerListener(bungee, this);
     }
 
-    @EventHandler
-    public void onPlayerConnect(ServerConnectEvent event) {
-        if (event.getReason() != ServerConnectEvent.Reason.JOIN_PROXY) {
-            event.setCancelled(true);
-            return;
-        }
+    @Override
+    public void run() {
 
-        ServerInfo recommendServer = this.getRecommendedServer();
-        if (recommendServer != null) {
-            event.setTarget(recommendServer);
-        } else {
-            event.getPlayer().disconnect(new TextComponent("Sorry, there was no available server found. Please try again later."));
-            event.setCancelled(true);
-        }
     }
 
-    private ServerInfo getRecommendedServer() {
-        try (Jedis jedis = this.connectionPool.getResource()) {
-            Optional<ServerInfo> bestServer = jedis.zrangeByScoreWithScores(REDIS_SERVER_KEY, 0, 1)
-                    .stream()
-                    .filter(server -> this.bungee.getProxy().getServerInfo(server.getElement()) != null)
-                    .filter(data -> data.getScore() < 1)    // Full server
-                    .sorted(new TargetSpacityComparator(this.bungee.getConfig().getTargetGameServerCapacity()))
-                    .map(tuple -> this.bungee.getProxy().getServerInfo(tuple.getElement()))
-                    .findFirst();
+    public ServerInfo getRecommendedServer() {
+        Optional<ServerInfo> bestServer = Collections.unmodifiableSet(this.currentPlayerCounts.entrySet())
+                .stream()
+                .filter(server -> this.bungee.getProxy().getServerInfo(server.getKey()) != null)
+                .filter(server -> server.getValue() < 1)
+                .min(new TargetSpacityComparator(this.bungee.getConfig().getTargetGameServerCapacity()))
+                .map(server -> this.bungee.getProxy().getServerInfo(server.getKey()));
 
-            return bestServer.orElse(null);
-        }
+        return bestServer.orElse(null);
     }
 
     public void close() {
-        this.bungee.getProxy().getPluginManager().unregisterListener(this);
         this.connectionPool.close();
     }
 

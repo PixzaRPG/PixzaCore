@@ -1,16 +1,21 @@
 package io.github.pixzarpg.core.loadbalancing.bungee;
 
 import io.github.pixzarpg.core.loadbalancing.bungee.load.ServerLoadBalancer;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.event.ServerConnectEvent;
+import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
+import net.md_5.bungee.event.EventHandler;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.logging.Level;
 
-public class BungeeLoadBalancer extends Plugin {
+public class BungeeLoadBalancer extends Plugin implements Listener {
 
     private BungeeLoadBalancerConfig config;
     private ServerLoadBalancer loadBalancer;
@@ -30,7 +35,9 @@ public class BungeeLoadBalancer extends Plugin {
         }
 
         this.loadBalancer = new ServerLoadBalancer(this);
+        this.getProxy().getPluginManager().registerListener(this, this);
 
+        this.loadBalancer.start();
     }
 
     public BungeeLoadBalancerConfig getConfig() {
@@ -40,6 +47,22 @@ public class BungeeLoadBalancer extends Plugin {
     @Override
     public void onDisable() {
         this.loadBalancer.close();
+    }
+
+    @EventHandler
+    public void onPlayerConnect(ServerConnectEvent event) {
+        if (event.getReason() != ServerConnectEvent.Reason.JOIN_PROXY) {
+            event.setCancelled(true);
+            return;
+        }
+
+        ServerInfo recommendServer = this.loadBalancer.getRecommendedServer();
+        if (recommendServer != null) {
+            event.setTarget(recommendServer);
+        } else {
+            event.getPlayer().disconnect(new TextComponent("Sorry, there was no available server found. Please try again later."));
+            event.setCancelled(true);
+        }
     }
 
     private void configSetup() throws IOException {
