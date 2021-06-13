@@ -3,7 +3,7 @@ package io.github.pixzarpg.core.loadbalancing.bungee.load;
 import java.util.Comparator;
 import java.util.Map;
 
-public class TargetSpacityComparator implements Comparator<Map.Entry<String, Double>> {
+public class TargetSpacityComparator implements Comparator<ServerLoadResponse> {
 
     /**
      * float between 0-1 that describes how full servers should be
@@ -15,14 +15,14 @@ public class TargetSpacityComparator implements Comparator<Map.Entry<String, Dou
     }
 
     @Override
-    public int compare(Map.Entry<String, Double> serverA, Map.Entry<String, Double> serverB) {
+    public int compare(ServerLoadResponse serverA, ServerLoadResponse serverB) {
         // In the case that both servers exceed the target space desired
-        if (serverA.getValue() >= targetSpacity && serverB.getValue() >= targetSpacity) {
+        if (serverA.getSpacity() >= targetSpacity && serverB.getSpacity() >= targetSpacity) {
             // Sort it by which server is the least full
-            if (serverA.getValue() == serverB.getValue()) {
+            if (serverA.getSpacity() == serverB.getSpacity()) {
                 // either or is okay
                 return 0;
-            } else if (serverA.getValue() > serverB.getValue()) {
+            } else if (serverA.getSpacity() > serverB.getSpacity()) {
                 // serverB is the better choice
                 return 1;
             } else {
@@ -32,17 +32,17 @@ public class TargetSpacityComparator implements Comparator<Map.Entry<String, Dou
         }
 
         // In the case that only one of the servers are above the spacity, go for the other server
-        if (serverA.getValue() >= targetSpacity) {
+        if (serverA.getSpacity() >= targetSpacity) {
             // serverB is the better choice
             return 1;
-        } else if (serverB.getValue() >= targetSpacity) {
+        } else if (serverB.getSpacity() >= targetSpacity) {
             // serverA is the better choice
             return -1;
         }
 
         // Sort by which is the closest to the target spacity.
-        double distanceA = this.targetSpacity - serverA.getValue();
-        double distanceB = this.targetSpacity - serverB.getValue();
+        double distanceA = this.targetSpacity - serverA.getSpacity();
+        double distanceB = this.targetSpacity - serverB.getSpacity();
 
         if (distanceA == distanceB) {
             // either or is okay

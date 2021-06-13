@@ -9,6 +9,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 import net.md_5.bungee.event.EventHandler;
+import redis.clients.jedis.exceptions.JedisException;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,7 +47,11 @@ public class BungeeLoadBalancer extends Plugin implements Listener {
 
     @Override
     public void onDisable() {
-        this.loadBalancer.close();
+        try {
+            this.loadBalancer.close();
+        } catch (JedisException exception) {
+            this.getLogger().log(Level.SEVERE, "Failed to close load balancer.", exception);
+        }
     }
 
     @EventHandler

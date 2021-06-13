@@ -15,6 +15,10 @@ public class BungeeLoadBalancerConfig {
         return this.config.getDouble("server_target_capacity");
     }
 
+    public String getProxyId() {
+        return this.config.getString("proxy_id");
+    }
+
     public String getRedisHost() {
         return this.config.getString("host");
     }
