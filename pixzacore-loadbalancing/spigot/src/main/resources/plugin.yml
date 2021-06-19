@@ -1,0 +1,5 @@
+name: PixzaLoadBalancer
+description: Pixza Spigot loadbalancing plugin
+version: 1.0.0
+main: io.github.pixzarpg.core.loadbalancing.spigot.SpigotLoadBalancer
+author: William Qi

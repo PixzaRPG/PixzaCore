@@ -9,7 +9,7 @@ import io.github.pixzarpg.core.impl.world.regions.RegionManager;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class WorldManager implements APIWorldManager {
+public class WorldManager implements APIWorldManager<World> {
 
     private final static String LOG_PREFIX = "WorldManager";
 
@@ -42,6 +42,11 @@ public class WorldManager implements APIWorldManager {
     @Override
     public APIRegionManager getRegionManager() {
         return this.regionManager;
+    }
+
+    @Override
+    public World getWorld() {
+        return this.rpgWorld;
     }
 
     @Override

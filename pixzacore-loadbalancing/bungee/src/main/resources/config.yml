@@ -1,0 +1,11 @@
+# a double between 0 to 1 that describes the ideal percentage of players you want on each game server
+server_target_capacity: 0.8
+
+# Name that can be associated with this bungee
+proxy_id: Name of this bungee
+
+# Redis database connection
+host: 0.0.0.0
+port: 6379
+username: your redis username
+password: your redis password

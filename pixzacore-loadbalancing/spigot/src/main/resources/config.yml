@@ -1,0 +1,8 @@
+# server_id that represents this game server on your bungee config
+server_id: id of the server listed in your bungee config file
+
+# Redis database connection
+host: 0.0.0.0
+port: 6379
+username: your redis username
+password: your redis password
