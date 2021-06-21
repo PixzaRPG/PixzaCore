@@ -1,9 +1,8 @@
 package io.github.pixzarpg.core.impl;
 
-import io.github.pixzarpg.core.api.APIRPGConfig;
 import org.bukkit.configuration.file.FileConfiguration;
 
-public class RPGConfig implements APIRPGConfig {
+public class RPGConfig {
 
     private final FileConfiguration configuration;
 

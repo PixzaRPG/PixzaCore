@@ -17,7 +17,7 @@ public class RPGPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.manager.close();
+
     }
 
 }

@@ -1,25 +1,21 @@
 package io.github.pixzarpg.core.impl.world.regions;
 
-import io.github.pixzarpg.core.api.world.APIWorldManager;
-import io.github.pixzarpg.core.api.world.regions.APIRegionManager;
-import io.github.pixzarpg.core.api.world.regions.APIWorldRegion;
+import io.github.pixzarpg.core.impl.world.WorldManager;
 
-public class RegionManager implements APIRegionManager {
+public class RegionManager {
 
-    private final APIWorldManager worldManager;
+    private final WorldManager worldManager;
 
 
-    public RegionManager(APIWorldManager worldManager) {
+    public RegionManager(WorldManager worldManager) {
         this.worldManager = worldManager;
     }
 
-    @Override
-    public APIWorldRegion getRegion(int x, int y, int z) {
+    public WorldRegion getRegion(int x, int y, int z) {
         return null;
     }
 
-    @Override
-    public void registerRegion(APIWorldRegion region) {
+    public void registerRegion(WorldRegion region) {
 
     }
 

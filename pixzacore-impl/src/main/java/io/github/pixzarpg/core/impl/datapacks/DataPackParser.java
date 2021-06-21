@@ -1,11 +1,8 @@
 package io.github.pixzarpg.core.impl.datapacks;
 
-import io.github.pixzarpg.core.api.datapacks.APIDataPack;
-import io.github.pixzarpg.core.api.datapacks.APIDataPackParser;
-
 import java.io.File;
 
-public class DataPackParser implements APIDataPackParser<File> {
+public class DataPackParser {
 
     private final DataPackManager dataPackManager;
 
@@ -14,8 +11,7 @@ public class DataPackParser implements APIDataPackParser<File> {
         this.dataPackManager = dataPackManager;
     }
 
-    @Override
-    public APIDataPack parse(File input) {
+    public DataPack parse(File input) {
         return null;
     }
 

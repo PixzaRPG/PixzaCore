@@ -1,31 +1,29 @@
 package io.github.pixzarpg.core.impl.datapacks;
 
-import io.github.pixzarpg.core.api.APIRPGManager;
-import io.github.pixzarpg.core.api.datapacks.APIDataPackManager;
+import io.github.pixzarpg.core.impl.RPGManager;
 import io.github.pixzarpg.core.impl.utils.TextUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.Arrays;
 
-public class DataPackManager implements APIDataPackManager {
+public class DataPackManager {
 
     private final static String LOG_PREFIX = "DataPacks";
 
     private final DataPackParser loader;
-    private final APIRPGManager<JavaPlugin> manager;
+    private final RPGManager manager;
 
 
-    public DataPackManager(APIRPGManager<JavaPlugin> manager) {
+    public DataPackManager(RPGManager manager) {
         this.manager = manager;
         this.loader = new DataPackParser(this);
     }
 
-    public APIRPGManager<JavaPlugin> getManager() {
+    public RPGManager getManager() {
         return this.manager;
     }
 
-    @Override
     public void load() {
         this.manager.getPlugin().getLogger()
                 .info(TextUtils.generateLoggerMessage(LOG_PREFIX, "Loading data packs"));
