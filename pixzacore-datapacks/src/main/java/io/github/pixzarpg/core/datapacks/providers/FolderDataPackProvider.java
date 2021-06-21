@@ -1,4 +1,4 @@
-package io.github.pixzarpg.core.impl.datapacks.providers;
+package io.github.pixzarpg.core.datapacks.providers;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -10,7 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class FolderDataPackProvider {
+public class FolderDataPackProvider implements DataPackProvider {
 
     private static final Gson GSON = new Gson();
 
@@ -20,6 +20,7 @@ public class FolderDataPackProvider {
         this.parentFolder = parentFolder;
     }
 
+    @Override
     public JsonObject getFile(String path) throws IOException {
         File file = Paths.get(this.parentFolder.getAbsolutePath(), path).toFile();
         try (FileReader reader = new FileReader(file)) {
@@ -27,6 +28,7 @@ public class FolderDataPackProvider {
         }
     }
 
+    @Override
     public String[] getFiles(String path, boolean recursive) throws IOException {
         return Files.walk(Paths.get(this.parentFolder.getAbsolutePath(), path))
             .filter(filePath -> filePath.toFile().isFile())

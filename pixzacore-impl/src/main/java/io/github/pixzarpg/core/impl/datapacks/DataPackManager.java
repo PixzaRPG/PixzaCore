@@ -1,8 +1,8 @@
 package io.github.pixzarpg.core.impl.datapacks;
 
 import io.github.pixzarpg.core.impl.RPGManager;
+import io.github.pixzarpg.core.datapacks.providers.FolderDataPackProvider;
 import io.github.pixzarpg.core.impl.utils.TextUtils;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.Arrays;
@@ -11,16 +11,15 @@ public class DataPackManager {
 
     private final static String LOG_PREFIX = "DataPacks";
 
-    private final DataPackParser loader;
     private final RPGManager manager;
+    private DataPack[] dataPacks = new DataPack[0];
 
 
     public DataPackManager(RPGManager manager) {
         this.manager = manager;
-        this.loader = new DataPackParser(this);
     }
 
-    public RPGManager getManager() {
+    public RPGManager getRPGManager() {
         return this.manager;
     }
 
@@ -31,9 +30,11 @@ public class DataPackManager {
         File dataPacksFolder = new File(this.manager.getPlugin().getDataFolder().getAbsolutePath() + "/packs");
         dataPacksFolder.mkdirs();
 
-        Arrays.stream(dataPacksFolder.listFiles())
-                .forEach(this.loader::parse);
-
+        this.dataPacks = Arrays.stream(dataPacksFolder.listFiles())
+                .filter(File::isDirectory)
+                .map(FolderDataPackProvider::new)
+                .map(provider -> new DataPack(this, provider))
+                .toArray(DataPack[]::new);
 
         this.manager.getPlugin().getLogger()
                 .info(TextUtils.generateLoggerMessage(LOG_PREFIX, "Finished loading data packs"));

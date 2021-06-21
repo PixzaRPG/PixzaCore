@@ -19,8 +19,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.github.pixzarpg.core.api</groupId>
-            <artifactId>PixzaCore-API</artifactId>
+            <groupId>io.github.pixzarpg.core.datapacks</groupId>
+            <artifactId>PixzaCore-DataPacks</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
