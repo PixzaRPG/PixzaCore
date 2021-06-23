@@ -27,9 +27,7 @@ public class SpigotLoadBalancer extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         this.saveDefaultConfig();
-
         SpigotLoadBalancerConfig config = new SpigotLoadBalancerConfig(this.getConfig());
-
         this.serverId = config.getServerId();
 
         this.connectionPool = new JedisPool(
@@ -40,6 +38,7 @@ public class SpigotLoadBalancer extends JavaPlugin implements Listener {
 
         // In the case scenario we had to restart the game server without shutting down the bungees
         this.publishPlayerCount(this.getCurrentServerSpacity());
+        this.getServer().getPluginManager().registerEvents(this, this);
     }
 
     @Override
