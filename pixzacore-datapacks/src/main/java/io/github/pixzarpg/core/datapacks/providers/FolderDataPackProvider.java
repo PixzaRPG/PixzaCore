@@ -21,6 +21,11 @@ public class FolderDataPackProvider implements DataPackProvider {
     }
 
     @Override
+    public String getDataPackName() {
+        return this.parentFolder.getName();
+    }
+
+    @Override
     public JsonObject getFile(String path) throws IOException {
         File file = Paths.get(this.parentFolder.getAbsolutePath(), path).toFile();
         try (FileReader reader = new FileReader(file)) {
