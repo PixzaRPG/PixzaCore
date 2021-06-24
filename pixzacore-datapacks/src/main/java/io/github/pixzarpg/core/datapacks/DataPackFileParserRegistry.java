@@ -1,6 +1,7 @@
 package io.github.pixzarpg.core.datapacks;
 
-import io.github.pixzarpg.core.datapacks.api.DataPackManifestFile;
+import io.github.pixzarpg.core.datapacks.api.DataPackManifestObject;
+import io.github.pixzarpg.core.datapacks.api.DataPackRegionObject;
 import io.github.pixzarpg.core.datapacks.versions.v1.V1DataPackFileParserRegistry;
 
 import java.util.Collections;
@@ -16,7 +17,9 @@ public abstract class DataPackFileParserRegistry {
     });
 
 
-    public abstract DataPackFileParser<DataPackManifestFile> getManifestParser();
+    public abstract DataPackFileParser<DataPackManifestObject> getManifestParser();
+
+    public abstract DataPackFileParser<DataPackRegionObject> getRegionParser();
 
     public static DataPackFileParserRegistry getRegistry(int version) {
         return REGISTRY.getOrDefault(version, null);

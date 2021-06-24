@@ -3,15 +3,18 @@ package io.github.pixzarpg.core.datapacks.versions.v1.parsers;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.github.pixzarpg.core.datapacks.DataPackFileParser;
-import io.github.pixzarpg.core.datapacks.api.DataPackManifestFile;
+import io.github.pixzarpg.core.datapacks.api.DataPackManifestObject;
 
 import java.util.UUID;
 
-public class V1DataPackManifestFileParser implements DataPackFileParser<DataPackManifestFile> {
+public class V1DataPackManifestFileParser implements DataPackFileParser<DataPackManifestObject> {
+
+    public static final DataPackFileParser<DataPackManifestObject> INSTANCE = new V1DataPackManifestFileParser();
+
 
     @Override
-    public DataPackManifestFile parse(JsonObject data) {
-        DataPackManifestFile manifestFile = new DataPackManifestFile();
+    public DataPackManifestObject parse(JsonObject data) {
+        DataPackManifestObject manifestFile = new DataPackManifestObject();
 
         // Version of the parser to use
         manifestFile.setVersion(data.get("version").getAsInt());
@@ -25,10 +28,10 @@ public class V1DataPackManifestFileParser implements DataPackFileParser<DataPack
 
         // dependencies
         JsonArray jsonDependencies = data.get("dependencies").getAsJsonArray();
-        DataPackManifestFile.Dependency[] dependencies = new DataPackManifestFile.Dependency[jsonDependencies.size()];
+        DataPackManifestObject.Dependency[] dependencies = new DataPackManifestObject.Dependency[jsonDependencies.size()];
         for (int i = 0; i < jsonDependencies.size(); i++) {
             JsonObject jsonDependency = jsonDependencies.get(i).getAsJsonObject();
-            dependencies[i] = new DataPackManifestFile.Dependency(
+            dependencies[i] = new DataPackManifestObject.Dependency(
                     UUID.fromString(jsonDependency.get("uuid").getAsString()),
                     jsonDependency.get("version").getAsInt()
             );

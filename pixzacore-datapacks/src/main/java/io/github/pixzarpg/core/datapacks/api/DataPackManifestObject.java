@@ -2,7 +2,7 @@ package io.github.pixzarpg.core.datapacks.api;
 
 import java.util.UUID;
 
-public class DataPackManifestFile {
+public class DataPackManifestObject {
 
     private UUID uuid;
     private int version;
