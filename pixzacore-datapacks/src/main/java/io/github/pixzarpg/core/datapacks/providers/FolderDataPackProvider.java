@@ -37,7 +37,7 @@ public class FolderDataPackProvider implements DataPackProvider {
     public String[] getFiles(String path, boolean recursive) throws IOException {
         return Files.walk(Paths.get(this.parentFolder.getAbsolutePath(), path))
             .filter(filePath -> filePath.toFile().isFile())
-            .map(Path::toString)
+            .map(file -> file.toString().substring(this.parentFolder.getAbsolutePath().length()))
             .toArray(String[]::new);
     }
 

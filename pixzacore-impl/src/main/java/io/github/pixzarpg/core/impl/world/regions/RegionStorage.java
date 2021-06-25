@@ -4,6 +4,9 @@ import io.github.pixzarpg.core.api.world.regions.APIWorldRegion;
 import io.github.pixzarpg.core.commons.Vector3;
 
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class RegionStorage {
@@ -32,24 +35,37 @@ public class RegionStorage {
     }
 
     public void register(APIWorldRegion region) {
-
-        for (int xKey = getKey(region.getBoundaries().getMinBoundary().getX()); xKey <= getKey(region.getBoundaries().getMaxBoundary().getX()); xKey++) {
-            this.xRegionMap.compute(xKey, (key, currentList) -> {
-                Set<APIWorldRegion> regions = currentList != null ? currentList : new HashSet<>();
-                regions.add(region);
-                return regions;
-            });
-        }
-
-        for (int zKey = getKey(region.getBoundaries().getMinBoundary().getZ()); zKey <= getKey(region.getBoundaries().getMaxBoundary().getZ()); zKey++) {
-            this.zRegionMap.compute(zKey, (key, currentList) -> {
-                Set<APIWorldRegion> regions = currentList != null ? currentList : new HashSet<>();
-                regions.add(region);
-                return regions;
-            });
-        }
+        this.forEachRegionKeyInRegion(
+                region,
+                currentList -> {
+                    Set<APIWorldRegion> regions = currentList != null ? currentList : new HashSet<>();
+                    regions.add(region);
+                    return regions;
+                }
+        );
     }
 
+    public void unregister(APIWorldRegion region) {
+        this.forEachRegionKeyInRegion(
+                region,
+                currentList -> {
+                    if (currentList != null) {
+                        currentList.remove(region);
+                        return currentList;
+                    }
+                    return null;
+                }
+        );
+    }
+
+    private void forEachRegionKeyInRegion(APIWorldRegion region, Function<Set<APIWorldRegion>, Set<APIWorldRegion>> regionKeyHandler) {
+        for (int xKey = getKey(region.getBoundaries().getMinBoundary().getX()); xKey <= getKey(region.getBoundaries().getMaxBoundary().getX()); xKey++) {
+            this.xRegionMap.compute(xKey, (key, currentList) -> regionKeyHandler.apply(currentList));
+        }
+        for (int zKey = getKey(region.getBoundaries().getMinBoundary().getZ()); zKey <= getKey(region.getBoundaries().getMaxBoundary().getZ()); zKey++) {
+            this.zRegionMap.compute(zKey, (key, currentList) -> regionKeyHandler.apply(currentList));
+        }
+    }
 
     /**
      * Convert a coordinate to a multiple of KEY_INCREMENT.

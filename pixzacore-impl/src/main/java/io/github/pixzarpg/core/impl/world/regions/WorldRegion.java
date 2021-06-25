@@ -97,7 +97,7 @@ public class WorldRegion implements APIWorldRegion {
             return this;
         }
 
-        public APIWorldRegion build() {
+        public WorldRegion build() {
             return new WorldRegion(
                     this.uuid,
                     this.description,

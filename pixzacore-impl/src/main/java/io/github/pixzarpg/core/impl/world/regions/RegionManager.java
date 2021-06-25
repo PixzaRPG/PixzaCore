@@ -24,8 +24,12 @@ public class RegionManager {
         return this.storage.getRegions(vector3);
     }
 
-    public void registerRegion(WorldRegion region) {
+    public void registerRegion(APIWorldRegion region) {
         this.storage.register(region);
+    }
+
+    public void unregisterRegion(APIWorldRegion region) {
+        this.storage.unregister(region);
     }
 
 }
