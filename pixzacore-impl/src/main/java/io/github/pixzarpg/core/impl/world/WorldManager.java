@@ -35,6 +35,10 @@ public class WorldManager {
         this.rpgWorld.setAutoSave(false);    // We don't want modifications to the world to persist.
 
     }
+
+    public RPGManager getRPGManager() {
+        return this.manager;
+    }
     
     public RegionManager getRegionManager() {
         return this.regionManager;

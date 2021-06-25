@@ -4,9 +4,7 @@ import io.github.pixzarpg.core.api.world.regions.APIWorldRegion;
 import io.github.pixzarpg.core.commons.Vector3;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class RegionStorage {
