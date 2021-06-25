@@ -2,9 +2,10 @@ package io.github.pixzarpg.core.datapacks.versions.v1.parsers;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import io.github.pixzarpg.core.commons.Vector3;
 import io.github.pixzarpg.core.datapacks.DataPackFileParser;
 import io.github.pixzarpg.core.datapacks.api.DataPackRegionObject;
-import io.github.pixzarpg.core.datapacks.utils.Vector3f;
+import io.github.pixzarpg.core.commons.Vector3f;
 
 import java.util.UUID;
 
@@ -23,18 +24,18 @@ public class V1DataPackRegionFileParser implements DataPackFileParser<DataPackRe
 
         // Boundaries
         JsonObject boundaryAObject = data.get("boundaries").getAsJsonArray().get(0).getAsJsonObject();
-        Vector3f vectorAObject = new Vector3f(
-                boundaryAObject.get("x").getAsFloat(),
-                boundaryAObject.get("y").getAsFloat(),
-                boundaryAObject.get("z").getAsFloat()
+        Vector3 vectorAObject = new Vector3(
+                boundaryAObject.get("x").getAsInt(),
+                boundaryAObject.get("y").getAsInt(),
+                boundaryAObject.get("z").getAsInt()
         );
         regionObject.setBoundaryA(vectorAObject);
 
         JsonObject boundaryBObject = data.get("boundaries").getAsJsonArray().get(1).getAsJsonObject();
-        Vector3f vectorBObject = new Vector3f(
-                boundaryBObject.get("x").getAsFloat(),
-                boundaryBObject.get("y").getAsFloat(),
-                boundaryBObject.get("z").getAsFloat()
+        Vector3 vectorBObject = new Vector3(
+                boundaryBObject.get("x").getAsInt(),
+                boundaryBObject.get("y").getAsInt(),
+                boundaryBObject.get("z").getAsInt()
         );
         regionObject.setBoundaryB(vectorBObject);
 

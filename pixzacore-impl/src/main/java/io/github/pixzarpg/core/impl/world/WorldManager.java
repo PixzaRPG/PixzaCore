@@ -22,7 +22,7 @@ public class WorldManager {
 
     public void initialize() {
 
-        RPGConfig config = (RPGConfig)this.manager.getConfig();
+        RPGConfig config = this.manager.getConfig();
 
         this.rpgWorld = this.manager.getPlugin().getServer()
                 .getWorld(config.getWorldName());

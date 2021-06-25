@@ -1,4 +1,4 @@
-package io.github.pixzarpg.core.datapacks.utils;
+package io.github.pixzarpg.core.commons;
 
 public class Vector3f {
 

@@ -1,7 +1,7 @@
 package io.github.pixzarpg.core.datapacks.api;
 
 import com.google.gson.JsonObject;
-import io.github.pixzarpg.core.datapacks.utils.Vector3f;
+import io.github.pixzarpg.core.commons.Vector3;
 
 import java.util.UUID;
 
@@ -10,8 +10,8 @@ public class DataPackRegionObject {
     private UUID uuid;
     private String description;
 
-    private Vector3f boundaryA;
-    private Vector3f boundaryB;
+    private Vector3 boundaryA;
+    private Vector3 boundaryB;
 
     private Flag[] flags = new Flag[0];
 
@@ -34,19 +34,19 @@ public class DataPackRegionObject {
         this.description = description;
     }
 
-    public Vector3f getBoundaryA() {
+    public Vector3 getBoundaryA() {
         return this.boundaryA;
     }
 
-    public void setBoundaryA(Vector3f boundaryA) {
+    public void setBoundaryA(Vector3 boundaryA) {
         this.boundaryA = boundaryA;
     }
 
-    public Vector3f getBoundaryB() {
+    public Vector3 getBoundaryB() {
         return this.boundaryB;
     }
 
-    public void setBoundaryB(Vector3f boundaryB) {
+    public void setBoundaryB(Vector3 boundaryB) {
         this.boundaryB = boundaryB;
     }
 

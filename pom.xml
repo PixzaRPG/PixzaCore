@@ -13,6 +13,7 @@
         <module>pixzacore-api</module>
         <module>pixzacore-impl</module>
         <module>pixzacore-loadbalancing</module>
+        <module>pixzacore-commons</module>
     </modules>
 
     <properties>
