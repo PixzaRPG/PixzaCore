@@ -17,13 +17,14 @@ public class V1DataPackManifestFileParser implements DataPackFileParser<DataPack
         DataPackManifestObject manifestFile = new DataPackManifestObject();
 
         // Version of the parser to use
-        manifestFile.setVersion(data.get("version").getAsInt());
+        manifestFile.setManifestVersion(data.get("version").getAsInt());
 
         // General info
         JsonObject manifestInfo = data.getAsJsonObject("info");
         manifestFile.setName(manifestInfo.get("name").getAsString());
         manifestFile.setDescription(manifestInfo.get("description").getAsString());
         manifestFile.setAuthor(manifestInfo.get("author").getAsString());
+        manifestFile.setVersion(manifestInfo.get("version").getAsInt());
         manifestFile.setUuid(UUID.fromString(manifestInfo.get("uuid").getAsString()));
 
         // dependencies

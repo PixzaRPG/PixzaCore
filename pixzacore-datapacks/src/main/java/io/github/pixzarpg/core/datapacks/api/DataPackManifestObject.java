@@ -5,11 +5,12 @@ import java.util.UUID;
 public class DataPackManifestObject {
 
     private UUID uuid;
-    private int version;
+    private int manifestVersion;
 
     private String name;
     private String description;
     private String author;
+    private int version;
 
     private Dependency[] dependencies = new Dependency[0];
 
@@ -22,12 +23,12 @@ public class DataPackManifestObject {
         this.uuid = uuid;
     }
 
-    public int getVersion() {
-        return this.version;
+    public int getManifestVersion() {
+        return this.manifestVersion;
     }
 
-    public void setVersion(int version) {
-        this.version = version;
+    public void setManifestVersion(int version) {
+        this.manifestVersion = version;
     }
 
     public String getName() {
@@ -52,6 +53,14 @@ public class DataPackManifestObject {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public int getVersion() {
+        return this.version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     public Dependency[] getDependencies() {
