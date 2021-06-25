@@ -16,28 +16,6 @@ public class V1DataPackRegionFileParser implements DataPackFileParser<DataPackRe
 
     @Override
     public DataPackRegionObject parse(JsonObject data) {
-        DataPackRegionObject regionObject = new DataPackRegionObject();
-
-        // Info
-        regionObject.setUuid(UUID.fromString(data.get("uuid").getAsString()));
-        regionObject.setDescription(data.get("description").getAsString());
-
-        // Boundaries
-        JsonObject boundaryAObject = data.get("boundaries").getAsJsonArray().get(0).getAsJsonObject();
-        Vector3 vectorAObject = new Vector3(
-                boundaryAObject.get("x").getAsInt(),
-                boundaryAObject.get("y").getAsInt(),
-                boundaryAObject.get("z").getAsInt()
-        );
-        regionObject.setBoundaryA(vectorAObject);
-
-        JsonObject boundaryBObject = data.get("boundaries").getAsJsonArray().get(1).getAsJsonObject();
-        Vector3 vectorBObject = new Vector3(
-                boundaryBObject.get("x").getAsInt(),
-                boundaryBObject.get("y").getAsInt(),
-                boundaryBObject.get("z").getAsInt()
-        );
-        regionObject.setBoundaryB(vectorBObject);
 
         // Flags
         JsonArray flagsJSON = data.get("flags").getAsJsonArray();
@@ -46,7 +24,6 @@ public class V1DataPackRegionFileParser implements DataPackFileParser<DataPackRe
             JsonObject flagJSON = flagsJSON.get(i).getAsJsonObject();
             flags[i] = new DataPackRegionObject.Flag(flagJSON.get("type").getAsString(), flagJSON.get("data").getAsJsonObject());
         }
-        regionObject.setFlags(flags);
 
         // Subregions
         JsonArray subRegionsJSON = data.get("subregions").getAsJsonArray();
@@ -54,9 +31,30 @@ public class V1DataPackRegionFileParser implements DataPackFileParser<DataPackRe
         for (int i = 0; i < subRegions.length; i++) {
             subRegions[i] = this.parse(subRegionsJSON.get(i).getAsJsonObject());
         }
-        regionObject.setSubRegions(subRegions);
 
-        return regionObject;
+        // Boundaries
+        JsonObject boundaryAObject = data.get("boundaries").getAsJsonArray().get(0).getAsJsonObject();
+        Vector3 vectorAObject = new Vector3(
+                boundaryAObject.get("x").getAsInt(),
+                boundaryAObject.get("y").getAsInt(),
+                boundaryAObject.get("z").getAsInt()
+        );
+
+        JsonObject boundaryBObject = data.get("boundaries").getAsJsonArray().get(1).getAsJsonObject();
+        Vector3 vectorBObject = new Vector3(
+                boundaryBObject.get("x").getAsInt(),
+                boundaryBObject.get("y").getAsInt(),
+                boundaryBObject.get("z").getAsInt()
+        );
+
+        return new DataPackRegionObject.Builder()
+                .setUuid(UUID.fromString(data.get("uuid").getAsString()))
+                .setDescription(data.get("description").getAsString())
+                .setBoundaryA(vectorAObject)
+                .setBoundaryB(vectorBObject)
+                .setFlags(flags)
+                .setSubRegions(subRegions)
+                .build();
     }
 
 }

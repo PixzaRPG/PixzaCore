@@ -7,63 +7,56 @@ import java.util.UUID;
 
 public class DataPackRegionObject {
 
-    private UUID uuid;
-    private String description;
+    private final UUID uuid;
+    private final String description;
 
-    private Vector3 boundaryA;
-    private Vector3 boundaryB;
+    private final Vector3 boundaryA;
+    private final Vector3 boundaryB;
 
-    private Flag[] flags = new Flag[0];
+    private final Flag[] flags;
 
-    private DataPackRegionObject[] subRegions = new DataPackRegionObject[0];
+    private final DataPackRegionObject[] subRegions;
+
+
+    protected DataPackRegionObject(
+        UUID uuid,
+        String description,
+        Vector3 boundaryA,
+        Vector3 boundaryB,
+        Flag[] flags,
+        DataPackRegionObject[] subRegions
+    ) {
+        this.uuid = uuid;
+        this.description = description;
+        this.boundaryA = boundaryA;
+        this.boundaryB = boundaryB;
+        this.flags = flags;
+        this.subRegions = subRegions;
+    }
 
 
     public UUID getUuid() {
         return this.uuid;
     }
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
-
     public String getDescription() {
         return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Vector3 getBoundaryA() {
         return this.boundaryA;
     }
 
-    public void setBoundaryA(Vector3 boundaryA) {
-        this.boundaryA = boundaryA;
-    }
-
     public Vector3 getBoundaryB() {
         return this.boundaryB;
-    }
-
-    public void setBoundaryB(Vector3 boundaryB) {
-        this.boundaryB = boundaryB;
     }
 
     public Flag[] getFlags() {
         return this.flags;
     }
 
-    public void setFlags(Flag[] flags) {
-        this.flags = flags;
-    }
-
     public DataPackRegionObject[] getSubRegions() {
         return this.subRegions;
-    }
-
-    public void setSubRegions(DataPackRegionObject[] subRegions) {
-        this.subRegions = subRegions;
     }
 
 
@@ -84,6 +77,62 @@ public class DataPackRegionObject {
 
         public JsonObject getData() {
             return this.data;
+        }
+
+    }
+
+    public static class Builder {
+
+        private UUID uuid;
+        private String description;
+
+        private Vector3 boundaryA;
+        private Vector3 boundaryB;
+
+        private Flag[] flags = new Flag[0];
+
+        private DataPackRegionObject[] subRegions = new DataPackRegionObject[0];
+
+
+        public Builder setUuid(UUID uuid) {
+            this.uuid = uuid;
+            return this;
+        }
+
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder setBoundaryA(Vector3 boundaryA) {
+            this.boundaryA = boundaryA;
+            return this;
+        }
+
+        public Builder setBoundaryB(Vector3 boundaryB) {
+            this.boundaryB = boundaryB;
+            return this;
+        }
+
+        public Builder setFlags(Flag[] flags) {
+            this.flags = flags;
+            return this;
+        }
+
+        public Builder setSubRegions(DataPackRegionObject[] subRegions) {
+            this.subRegions = subRegions;
+            return this;
+        }
+
+        public DataPackRegionObject build() {
+            return new DataPackRegionObject(
+                    this.uuid,
+                    this.description,
+                    this.boundaryA,
+                    this.boundaryB,
+                    this.flags,
+                    this.subRegions
+            );
         }
 
     }

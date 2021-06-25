@@ -14,19 +14,6 @@ public class V1DataPackManifestFileParser implements DataPackFileParser<DataPack
 
     @Override
     public DataPackManifestObject parse(JsonObject data) {
-        DataPackManifestObject manifestFile = new DataPackManifestObject();
-
-        // Version of the parser to use
-        manifestFile.setManifestVersion(data.get("version").getAsInt());
-
-        // General info
-        JsonObject manifestInfo = data.getAsJsonObject("info");
-        manifestFile.setName(manifestInfo.get("name").getAsString());
-        manifestFile.setDescription(manifestInfo.get("description").getAsString());
-        manifestFile.setAuthor(manifestInfo.get("author").getAsString());
-        manifestFile.setVersion(manifestInfo.get("version").getAsInt());
-        manifestFile.setUuid(UUID.fromString(manifestInfo.get("uuid").getAsString()));
-
         // dependencies
         JsonArray jsonDependencies = data.get("dependencies").getAsJsonArray();
         DataPackManifestObject.Dependency[] dependencies = new DataPackManifestObject.Dependency[jsonDependencies.size()];
@@ -37,9 +24,17 @@ public class V1DataPackManifestFileParser implements DataPackFileParser<DataPack
                     jsonDependency.get("version").getAsInt()
             );
         }
-        manifestFile.setDependencies(dependencies);
 
-        return manifestFile;
+        JsonObject manifestInfo = data.getAsJsonObject("info");
+        return new DataPackManifestObject.Builder()
+                .setUuid(UUID.fromString(manifestInfo.get("uuid").getAsString()))
+                .setManifestVersion(data.get("version").getAsInt())
+                .setDescription(manifestInfo.get("description").getAsString())
+                .setName(manifestInfo.get("name").getAsString())
+                .setVersion(manifestInfo.get("version").getAsInt())
+                .setAuthor(manifestInfo.get("author").getAsString())
+                .setDependencies(dependencies)
+                .build();
     }
 
 }

@@ -42,7 +42,7 @@ public class DataPackRegistryTest {
     public void shouldFailWithCircularDependencies() {
 
         // rootDataPack depends on innerDependency which depends on rootDataPack
-        APIDataPack innerDependency = new MockDataPack();
+        MockDataPack innerDependency = new MockDataPack();
         APIDataPack rootDataPack = new MockDataPack(new DataPackManifestObject.Dependency[]{ toDependency(innerDependency) });
         innerDependency.getManifest().setDependencies(new DataPackManifestObject.Dependency[]{ toDependency(rootDataPack) });
 
@@ -71,7 +71,7 @@ public class DataPackRegistryTest {
 
     private static class MockDataPack implements APIDataPack {
 
-        private final DataPackManifestObject manifest;
+        private final MockManifestObject manifest;
 
 
         public MockDataPack() {
@@ -79,9 +79,7 @@ public class DataPackRegistryTest {
         }
 
         public MockDataPack(DataPackManifestObject.Dependency[] dependencies) {
-            this.manifest = new DataPackManifestObject();
-            this.manifest.setUuid(UUID.randomUUID());
-            this.manifest.setDependencies(dependencies);
+            this.manifest = new MockManifestObject(UUID.randomUUID(), 1, "", "", "", 1, dependencies);
         }
 
         @Override
@@ -95,10 +93,29 @@ public class DataPackRegistryTest {
         }
 
         @Override
-        public DataPackManifestObject getManifest() {
+        public MockManifestObject getManifest() {
             return this.manifest;
         }
 
+    }
+
+    public static class MockManifestObject extends DataPackManifestObject {
+
+        private Dependency[] dependencies;
+
+        protected MockManifestObject(UUID uuid, int manifestVersion, String name, String description, String author, int version, Dependency[] dependencies) {
+            super(uuid, manifestVersion, name, description, author, version, dependencies);
+            this.dependencies = dependencies;
+        }
+
+        public void setDependencies(Dependency[] dependencies) {
+            this.dependencies = dependencies;
+        }
+
+        @Override
+        public Dependency[] getDependencies() {
+            return this.dependencies;
+        }
     }
 
 }
