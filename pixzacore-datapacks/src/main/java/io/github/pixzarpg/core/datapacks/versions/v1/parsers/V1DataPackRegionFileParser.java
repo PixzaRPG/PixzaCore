@@ -7,6 +7,8 @@ import io.github.pixzarpg.core.datapacks.DataPackFileParser;
 import io.github.pixzarpg.core.datapacks.api.DataPackRegionObject;
 import io.github.pixzarpg.core.commons.Vector3f;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 public class V1DataPackRegionFileParser implements DataPackFileParser<DataPackRegionObject> {
@@ -19,17 +21,17 @@ public class V1DataPackRegionFileParser implements DataPackFileParser<DataPackRe
 
         // Flags
         JsonArray flagsJSON = data.get("flags").getAsJsonArray();
-        DataPackRegionObject.Flag[] flags = new DataPackRegionObject.Flag[flagsJSON.size()];
-        for (int i = 0; i < flags.length; i++) {
+        Set<DataPackRegionObject.Flag> flags = new HashSet<>(flagsJSON.size());
+        for (int i = 0; i < flagsJSON.size(); i++) {
             JsonObject flagJSON = flagsJSON.get(i).getAsJsonObject();
-            flags[i] = new DataPackRegionObject.Flag(flagJSON.get("type").getAsString(), flagJSON.get("data").getAsJsonObject());
+            flags.add(new DataPackRegionObject.Flag(flagJSON.get("type").getAsString(), flagJSON.get("data").getAsJsonObject()));
         }
 
         // Subregions
         JsonArray subRegionsJSON = data.get("subregions").getAsJsonArray();
-        DataPackRegionObject[] subRegions = new DataPackRegionObject[subRegionsJSON.size()];
-        for (int i = 0; i < subRegions.length; i++) {
-            subRegions[i] = this.parse(subRegionsJSON.get(i).getAsJsonObject());
+        Set<DataPackRegionObject> subRegions = new HashSet<>(subRegionsJSON.size());
+        for (int i = 0; i < subRegionsJSON.size(); i++) {
+            subRegions.add(this.parse(subRegionsJSON.get(i).getAsJsonObject()));
         }
 
         // Boundaries

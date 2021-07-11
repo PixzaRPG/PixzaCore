@@ -6,8 +6,7 @@ import io.github.pixzarpg.core.impl.exceptions.datapacks.CircularDependencyExcep
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -19,11 +18,18 @@ public class DataPackRegistryTest {
         // parentDataPack depends on dependencyA and dependencyB. DependencyA depends on parentDataPack
 
         APIDataPack innerDependency = new MockDataPack();
-        APIDataPack dependencyA = new MockDataPack(new DataPackManifestObject.Dependency[]{ toDependency(innerDependency) });
+        APIDataPack dependencyA = new MockDataPack(new HashSet<DataPackManifestObject.Dependency>(){
+            {
+                this.add(toDependency(innerDependency));
+            }
+        });
         APIDataPack dependencyB = new MockDataPack();
 
-        APIDataPack parentDataPack = new MockDataPack(new DataPackManifestObject.Dependency[]{
-                toDependency(dependencyA), toDependency(dependencyB)
+        APIDataPack parentDataPack = new MockDataPack(new HashSet<DataPackManifestObject.Dependency>(){
+            {
+                this.add(toDependency(dependencyA));
+                this.add(toDependency(dependencyB));
+            }
         });
 
         DataPackRegistry registry = new DataPackRegistry(new HashMap<UUID, APIDataPack>(){
@@ -43,8 +49,16 @@ public class DataPackRegistryTest {
 
         // rootDataPack depends on innerDependency which depends on rootDataPack
         MockDataPack innerDependency = new MockDataPack();
-        APIDataPack rootDataPack = new MockDataPack(new DataPackManifestObject.Dependency[]{ toDependency(innerDependency) });
-        innerDependency.getManifest().setDependencies(new DataPackManifestObject.Dependency[]{ toDependency(rootDataPack) });
+        APIDataPack rootDataPack = new MockDataPack(new HashSet<DataPackManifestObject.Dependency>(){
+            {
+                this.add(toDependency(innerDependency));
+            }
+        });
+        innerDependency.getManifest().setDependencies(new HashSet<DataPackManifestObject.Dependency>(){
+            {
+                this.add(toDependency(rootDataPack));
+            }
+        });
 
         DataPackRegistry registry = new DataPackRegistry(new HashMap<UUID, APIDataPack>(){
             {
@@ -75,10 +89,10 @@ public class DataPackRegistryTest {
 
 
         public MockDataPack() {
-            this(new DataPackManifestObject.Dependency[0]);
+            this(Collections.emptySet());
         }
 
-        public MockDataPack(DataPackManifestObject.Dependency[] dependencies) {
+        public MockDataPack(Set<DataPackManifestObject.Dependency> dependencies) {
             this.manifest = new MockManifestObject(UUID.randomUUID(), 1, "", "", "", 1, dependencies);
         }
 
@@ -101,19 +115,19 @@ public class DataPackRegistryTest {
 
     public static class MockManifestObject extends DataPackManifestObject {
 
-        private Dependency[] dependencies;
+        private Set<Dependency> dependencies;
 
-        protected MockManifestObject(UUID uuid, int manifestVersion, String name, String description, String author, int version, Dependency[] dependencies) {
+        protected MockManifestObject(UUID uuid, int manifestVersion, String name, String description, String author, int version, Set<Dependency> dependencies) {
             super(uuid, manifestVersion, name, description, author, version, dependencies);
             this.dependencies = dependencies;
         }
 
-        public void setDependencies(Dependency[] dependencies) {
+        public void setDependencies(Set<Dependency> dependencies) {
             this.dependencies = dependencies;
         }
 
         @Override
-        public Dependency[] getDependencies() {
+        public Set<Dependency> getDependencies() {
             return this.dependencies;
         }
     }

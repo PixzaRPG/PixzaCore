@@ -3,6 +3,7 @@ package io.github.pixzarpg.core.api.world.regions;
 import io.github.pixzarpg.core.api.world.regions.flags.APIRegionFlag;
 import io.github.pixzarpg.core.commons.Boundaries;
 
+import java.util.Set;
 import java.util.UUID;
 
 public interface APIWorldRegion {
@@ -12,7 +13,7 @@ public interface APIWorldRegion {
 
     Boundaries getBoundaries();
 
-    APIRegionFlag[] getFlags();
-    APIWorldRegion[] getSubRegions();
+    Set<APIRegionFlag> getFlags();
+    Set<APIWorldRegion> getSubRegions();
 
 }

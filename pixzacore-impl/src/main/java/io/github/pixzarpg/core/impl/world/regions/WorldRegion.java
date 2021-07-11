@@ -5,6 +5,8 @@ import io.github.pixzarpg.core.api.world.regions.flags.APIRegionFlag;
 import io.github.pixzarpg.core.commons.Boundaries;
 import io.github.pixzarpg.core.commons.Vector3;
 
+import java.util.Collections;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -17,16 +19,16 @@ public class WorldRegion implements APIWorldRegion {
 
     private final Boundaries boundaries;
 
-    private final APIRegionFlag[] flags;
-    private final APIWorldRegion[] subRegions;
+    private final Set<APIRegionFlag> flags;
+    private final Set<APIWorldRegion> subRegions;
 
 
     private WorldRegion(
             UUID uuid,
             String description,
             Boundaries boundaries,
-            APIRegionFlag[] flags,
-            APIWorldRegion[] subRegions
+            Set<APIRegionFlag> flags,
+            Set<APIWorldRegion> subRegions
     ) {
         this.uuid = uuid;
         this.description = description;
@@ -51,12 +53,12 @@ public class WorldRegion implements APIWorldRegion {
     }
 
     @Override
-    public APIRegionFlag[] getFlags() {
+    public Set<APIRegionFlag> getFlags() {
         return this.flags;
     }
 
     @Override
-    public APIWorldRegion[] getSubRegions() {
+    public Set<APIWorldRegion> getSubRegions() {
         return this.subRegions;
     }
 
@@ -68,8 +70,8 @@ public class WorldRegion implements APIWorldRegion {
 
         private Boundaries boundaries;
 
-        private APIRegionFlag[] flags = new APIRegionFlag[0];
-        private APIWorldRegion[] subRegions = new APIWorldRegion[0];
+        private Set<APIRegionFlag> flags = Collections.emptySet();
+        private Set<APIWorldRegion> subRegions = Collections.emptySet();
 
 
         public Builder setUuid(UUID uuid) {
@@ -87,12 +89,12 @@ public class WorldRegion implements APIWorldRegion {
             return this;
         }
 
-        public Builder setFlags(APIRegionFlag[] flags) {
+        public Builder setFlags(Set<APIRegionFlag> flags) {
             this.flags = flags;
             return this;
         }
 
-        public Builder setSubRegions(APIWorldRegion[] subRegions) {
+        public Builder setSubRegions(Set<APIWorldRegion> subRegions) {
             this.subRegions = subRegions;
             return this;
         }

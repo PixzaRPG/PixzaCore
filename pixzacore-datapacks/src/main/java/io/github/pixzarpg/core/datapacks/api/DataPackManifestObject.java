@@ -1,5 +1,7 @@
 package io.github.pixzarpg.core.datapacks.api;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 public class DataPackManifestObject {
@@ -12,7 +14,7 @@ public class DataPackManifestObject {
     private final String author;
     private final int version;
 
-    private final Dependency[] dependencies;
+    private final Set<Dependency> dependencies;
 
 
     protected DataPackManifestObject(
@@ -22,7 +24,7 @@ public class DataPackManifestObject {
             String description,
             String author,
             int version,
-            Dependency[] dependencies
+            Set<Dependency> dependencies
     ) {
         this.uuid = uuid;
         this.manifestVersion = manifestVersion;
@@ -58,7 +60,7 @@ public class DataPackManifestObject {
         return this.version;
     }
 
-    public Dependency[] getDependencies() {
+    public Set<Dependency> getDependencies() {
         return this.dependencies;
     }
 
@@ -95,7 +97,7 @@ public class DataPackManifestObject {
         private String author;
         private int version;
 
-        private Dependency[] dependencies = new Dependency[0];
+        private Set<Dependency> dependencies = new HashSet<>();
 
 
         public Builder setUuid(UUID uuid) {
@@ -128,7 +130,7 @@ public class DataPackManifestObject {
             return this;
         }
 
-        public Builder setDependencies(Dependency[] dependencies) {
+        public Builder setDependencies(Set<Dependency> dependencies) {
             this.dependencies = dependencies;
             return this;
         }

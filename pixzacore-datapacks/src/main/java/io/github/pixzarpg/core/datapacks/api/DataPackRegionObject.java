@@ -3,6 +3,8 @@ package io.github.pixzarpg.core.datapacks.api;
 import com.google.gson.JsonObject;
 import io.github.pixzarpg.core.commons.Vector3;
 
+import java.util.Collections;
+import java.util.Set;
 import java.util.UUID;
 
 public class DataPackRegionObject {
@@ -13,9 +15,9 @@ public class DataPackRegionObject {
     private final Vector3 boundaryA;
     private final Vector3 boundaryB;
 
-    private final Flag[] flags;
+    private final Set<Flag> flags;
 
-    private final DataPackRegionObject[] subRegions;
+    private final Set<DataPackRegionObject> subRegions;
 
 
     protected DataPackRegionObject(
@@ -23,8 +25,8 @@ public class DataPackRegionObject {
         String description,
         Vector3 boundaryA,
         Vector3 boundaryB,
-        Flag[] flags,
-        DataPackRegionObject[] subRegions
+        Set<Flag> flags,
+        Set<DataPackRegionObject> subRegions
     ) {
         this.uuid = uuid;
         this.description = description;
@@ -51,11 +53,11 @@ public class DataPackRegionObject {
         return this.boundaryB;
     }
 
-    public Flag[] getFlags() {
+    public Set<Flag> getFlags() {
         return this.flags;
     }
 
-    public DataPackRegionObject[] getSubRegions() {
+    public Set<DataPackRegionObject> getSubRegions() {
         return this.subRegions;
     }
 
@@ -89,9 +91,9 @@ public class DataPackRegionObject {
         private Vector3 boundaryA;
         private Vector3 boundaryB;
 
-        private Flag[] flags = new Flag[0];
+        private Set<Flag> flags = Collections.emptySet();
 
-        private DataPackRegionObject[] subRegions = new DataPackRegionObject[0];
+        private Set<DataPackRegionObject> subRegions = Collections.emptySet();
 
 
         public Builder setUuid(UUID uuid) {
@@ -114,12 +116,12 @@ public class DataPackRegionObject {
             return this;
         }
 
-        public Builder setFlags(Flag[] flags) {
+        public Builder setFlags(Set<Flag> flags) {
             this.flags = flags;
             return this;
         }
 
-        public Builder setSubRegions(DataPackRegionObject[] subRegions) {
+        public Builder setSubRegions(Set<DataPackRegionObject> subRegions) {
             this.subRegions = subRegions;
             return this;
         }

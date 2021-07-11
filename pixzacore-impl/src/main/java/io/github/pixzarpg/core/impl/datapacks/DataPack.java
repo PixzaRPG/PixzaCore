@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import io.github.pixzarpg.core.api.datapacks.APIDataPack;
 import io.github.pixzarpg.core.api.world.regions.APIWorldRegion;
 import io.github.pixzarpg.core.datapacks.DataPackFileParserRegistry;
+import io.github.pixzarpg.core.datapacks.api.DataPackItemObject;
 import io.github.pixzarpg.core.datapacks.api.DataPackManifestObject;
 import io.github.pixzarpg.core.datapacks.api.DataPackRegionObject;
 import io.github.pixzarpg.core.datapacks.providers.DataPackProvider;
@@ -45,6 +46,7 @@ public class DataPack implements APIDataPack {
     @Override
     public void register() throws IOException {
         this.registerRegions();
+        this.registerItems();
     }
 
     /**
@@ -68,16 +70,27 @@ public class DataPack implements APIDataPack {
         }
     }
 
+    private void registerItems() throws IOException {
+        String[] itemFiles = this.provider.getFiles("/items", true);
+        for (String itemFilePath : itemFiles) {
+            DataPackItemObject itemObject = this.registry.getItemParser().parse(this.provider.getFile(itemFilePath));
+            // TODO: ItemRegistry: register item
+        }
+    }
+
     /**
      * Recursive method that registers parent region as well as all sub regions within the DataPackRegionObject
      * @param regionObject
      * @return
      */
     private APIWorldRegion registerAndRetrieveSubRegion(DataPackRegionObject regionObject) {
-        APIWorldRegion[] subRegions = new APIWorldRegion[regionObject.getSubRegions().length];
-        for (int i = 0; i < subRegions.length; i++) {
-            subRegions[i] = this.registerAndRetrieveSubRegion(regionObject.getSubRegions()[i]);
-        }
+        Set<APIWorldRegion> subRegions = new HashSet<APIWorldRegion>(){
+            {
+                for (DataPackRegionObject subRegion : regionObject.getSubRegions()) {
+                    this.add(DataPack.this.registerAndRetrieveSubRegion(subRegion));
+                }
+            }
+        };
 
         // TODO: parse flags
         APIWorldRegion region = new WorldRegion.Builder()

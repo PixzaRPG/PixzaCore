@@ -5,6 +5,8 @@ import com.google.gson.JsonObject;
 import io.github.pixzarpg.core.datapacks.DataPackFileParser;
 import io.github.pixzarpg.core.datapacks.api.DataPackManifestObject;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 public class V1DataPackManifestFileParser implements DataPackFileParser<DataPackManifestObject> {
@@ -16,13 +18,12 @@ public class V1DataPackManifestFileParser implements DataPackFileParser<DataPack
     public DataPackManifestObject parse(JsonObject data) {
         // dependencies
         JsonArray jsonDependencies = data.get("dependencies").getAsJsonArray();
-        DataPackManifestObject.Dependency[] dependencies = new DataPackManifestObject.Dependency[jsonDependencies.size()];
+        Set<DataPackManifestObject.Dependency> dependencies = new HashSet<>(jsonDependencies.size());
         for (int i = 0; i < jsonDependencies.size(); i++) {
             JsonObject jsonDependency = jsonDependencies.get(i).getAsJsonObject();
-            dependencies[i] = new DataPackManifestObject.Dependency(
+            dependencies.add(new DataPackManifestObject.Dependency(
                     UUID.fromString(jsonDependency.get("uuid").getAsString()),
-                    jsonDependency.get("version").getAsInt()
-            );
+                    jsonDependency.get("version").getAsInt()));
         }
 
         JsonObject manifestInfo = data.getAsJsonObject("info");
