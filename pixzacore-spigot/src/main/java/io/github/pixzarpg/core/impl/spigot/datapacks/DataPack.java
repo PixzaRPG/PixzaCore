@@ -1,8 +1,6 @@
 package io.github.pixzarpg.core.impl.spigot.datapacks;
 
 import com.google.gson.JsonObject;
-import io.github.pixzarpg.core.api.datapacks.APIDataPack;
-import io.github.pixzarpg.core.api.world.regions.APIWorldRegion;
 import io.github.pixzarpg.core.datapacks.DataPackFileParserRegistry;
 import io.github.pixzarpg.core.datapacks.api.DataPackItemObject;
 import io.github.pixzarpg.core.datapacks.api.DataPackManifestObject;
@@ -14,7 +12,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class DataPack implements APIDataPack {
+public class DataPack {
 
     private final DataPackManager manager;
     private final DataPackProvider provider;
@@ -22,7 +20,7 @@ public class DataPack implements APIDataPack {
     private final DataPackManifestObject manifest;
     private final DataPackFileParserRegistry registry;
 
-    private final Set<APIWorldRegion> worldRegions = new HashSet<>();
+    private final Set<WorldRegion> worldRegions = new HashSet<>();
 
 
     public DataPack(DataPackManager manager, DataPackProvider provider) throws IOException {
@@ -43,7 +41,6 @@ public class DataPack implements APIDataPack {
      * Call this to read the contents of this data pack and register it to the server
      * @throws IOException
      */
-    @Override
     public void register() throws IOException {
         this.registerRegions();
         this.registerItems();
@@ -52,7 +49,6 @@ public class DataPack implements APIDataPack {
     /**
      * Remove the contents of this data pack from the server
      */
-    @Override
     public void unregister() {
         this.unregisterRegions();
     }
@@ -83,8 +79,8 @@ public class DataPack implements APIDataPack {
      * @param regionObject
      * @return
      */
-    private APIWorldRegion registerAndRetrieveSubRegion(DataPackRegionObject regionObject) {
-        Set<APIWorldRegion> subRegions = new HashSet<APIWorldRegion>(){
+    private WorldRegion registerAndRetrieveSubRegion(DataPackRegionObject regionObject) {
+        Set<WorldRegion> subRegions = new HashSet<WorldRegion>(){
             {
                 for (DataPackRegionObject subRegion : regionObject.getSubRegions()) {
                     this.add(DataPack.this.registerAndRetrieveSubRegion(subRegion));
@@ -93,7 +89,7 @@ public class DataPack implements APIDataPack {
         };
 
         // TODO: parse flags
-        APIWorldRegion region = new WorldRegion.Builder()
+        WorldRegion region = new WorldRegion.Builder()
                 .setUuid(regionObject.getUuid())
                 .setDescription(regionObject.getDescription())
                 .setBoundaries(regionObject.getBoundaryA(), regionObject.getBoundaryB())

@@ -1,6 +1,5 @@
 package io.github.pixzarpg.core.impl.spigot.world.regions;
 
-import io.github.pixzarpg.core.api.world.regions.APIWorldRegion;
 import io.github.pixzarpg.core.commons.Vector3;
 import io.github.pixzarpg.core.impl.spigot.events.world.regions.EnterWorldRegionEvent;
 import io.github.pixzarpg.core.impl.spigot.events.world.regions.LeaveWorldRegionEvent;
@@ -19,7 +18,7 @@ public class RegionManager implements Listener {
     private final WorldManager worldManager;
     private final RegionStorage storage = new RegionStorage();
 
-    private final Map<UUID, Set<APIWorldRegion>> regions = new HashMap<>();
+    private final Map<UUID, Set<WorldRegion>> regions = new HashMap<>();
 
 
     public RegionManager(WorldManager worldManager) {
@@ -27,33 +26,33 @@ public class RegionManager implements Listener {
         Bukkit.getServer().getPluginManager().registerEvents(this, worldManager.getRPGManager().getPlugin());
     }
 
-    public Set<APIWorldRegion> getRegions(int x, int y, int z) {
+    public Set<WorldRegion> getRegions(int x, int y, int z) {
         return this.getRegions(new Vector3(x, y, z));
     }
 
-    public Set<APIWorldRegion> getRegions(Location location) {
+    public Set<WorldRegion> getRegions(Location location) {
         return this.getRegions(new Vector3(location.getBlockX(), location.getBlockY(), location.getBlockZ()));
     }
 
-    public Set<APIWorldRegion> getRegions(Vector3 vector3) {
+    public Set<WorldRegion> getRegions(Vector3 vector3) {
         return this.storage.getRegions(vector3);
     }
 
-    public void registerRegion(APIWorldRegion region) {
+    public void registerRegion(WorldRegion region) {
         this.storage.register(region);
     }
 
-    public void unregisterRegion(APIWorldRegion region) {
+    public void unregisterRegion(WorldRegion region) {
         this.storage.unregister(region);
     }
 
     @EventHandler
     public void currentRegionCheck(PlayerMoveEvent event) {
-        Set<APIWorldRegion> currentRegions = this.regions.getOrDefault(event.getPlayer().getUniqueId(), new HashSet<>());
-        Set<APIWorldRegion> futureRegions = this.getRegions(event.getTo());
+        Set<WorldRegion> currentRegions = this.regions.getOrDefault(event.getPlayer().getUniqueId(), new HashSet<>());
+        Set<WorldRegion> futureRegions = this.getRegions(event.getTo());
 
         // What regions did we leave?
-        for (APIWorldRegion currentRegion : currentRegions) {
+        for (WorldRegion currentRegion : currentRegions) {
             if (!futureRegions.contains(currentRegion)) {
                 // Player left the region
                 LeaveWorldRegionEvent leaveWorldRegionEvent = new LeaveWorldRegionEvent(event.getPlayer(), currentRegion);
@@ -66,11 +65,11 @@ public class RegionManager implements Listener {
         }
 
         // What regions did we enter?
-        Set<APIWorldRegion> newRegions = futureRegions
+        Set<WorldRegion> newRegions = futureRegions
                 .stream()
                 .filter(region -> !currentRegions.contains(region))
                 .collect(Collectors.toSet());
-        for (APIWorldRegion newRegion : newRegions) {
+        for (WorldRegion newRegion : newRegions) {
             EnterWorldRegionEvent enterWorldRegionEvent = new EnterWorldRegionEvent(event.getPlayer(), newRegion);
             Bukkit.getPluginManager().callEvent(enterWorldRegionEvent);
             if (enterWorldRegionEvent.isCancelled()) {

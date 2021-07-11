@@ -1,7 +1,9 @@
 package io.github.pixzarpg.core.impl.spigot.datapacks;
 
-import io.github.pixzarpg.core.api.datapacks.APIDataPack;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import io.github.pixzarpg.core.datapacks.api.DataPackManifestObject;
+import io.github.pixzarpg.core.datapacks.providers.DataPackProvider;
 import io.github.pixzarpg.core.impl.spigot.exceptions.datapacks.CircularDependencyException;
 import org.junit.jupiter.api.Test;
 
@@ -13,26 +15,26 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class DataPackRegistryTest {
 
     @Test
-    public void shouldLoadDependenciesBeforeParentDataPack() {
+    public void shouldLoadDependenciesBeforeParentDataPack() throws IOException {
 
         // parentDataPack depends on dependencyA and dependencyB. DependencyA depends on parentDataPack
 
-        APIDataPack innerDependency = new MockDataPack();
-        APIDataPack dependencyA = new MockDataPack(new HashSet<DataPackManifestObject.Dependency>(){
+        DataPack innerDependency = new MockDataPack();
+        DataPack dependencyA = new MockDataPack(new HashSet<DataPackManifestObject.Dependency>(){
             {
                 this.add(toDependency(innerDependency));
             }
         });
-        APIDataPack dependencyB = new MockDataPack();
+        DataPack dependencyB = new MockDataPack();
 
-        APIDataPack parentDataPack = new MockDataPack(new HashSet<DataPackManifestObject.Dependency>(){
+        DataPack parentDataPack = new MockDataPack(new HashSet<DataPackManifestObject.Dependency>(){
             {
                 this.add(toDependency(dependencyA));
                 this.add(toDependency(dependencyB));
             }
         });
 
-        DataPackRegistry registry = new DataPackRegistry(new HashMap<UUID, APIDataPack>(){
+        DataPackRegistry registry = new DataPackRegistry(new HashMap<UUID, DataPack>(){
             {
                 this.put(dependencyA.getManifest().getUuid(), dependencyA);
                 this.put(dependencyB.getManifest().getUuid(), dependencyB);
@@ -45,11 +47,11 @@ public class DataPackRegistryTest {
     }
 
     @Test
-    public void shouldFailWithCircularDependencies() {
+    public void shouldFailWithCircularDependencies() throws IOException {
 
         // rootDataPack depends on innerDependency which depends on rootDataPack
         MockDataPack innerDependency = new MockDataPack();
-        APIDataPack rootDataPack = new MockDataPack(new HashSet<DataPackManifestObject.Dependency>(){
+        DataPack rootDataPack = new MockDataPack(new HashSet<DataPackManifestObject.Dependency>(){
             {
                 this.add(toDependency(innerDependency));
             }
@@ -60,7 +62,7 @@ public class DataPackRegistryTest {
             }
         });
 
-        DataPackRegistry registry = new DataPackRegistry(new HashMap<UUID, APIDataPack>(){
+        DataPackRegistry registry = new DataPackRegistry(new HashMap<UUID, DataPack>(){
             {
                 this.put(rootDataPack.getManifest().getUuid(), rootDataPack);
                 this.put(innerDependency.getManifest().getUuid(), innerDependency);
@@ -78,33 +80,59 @@ public class DataPackRegistryTest {
 
     }
 
-    private static DataPackManifestObject.Dependency toDependency(APIDataPack dataPack) {
+    private static DataPackManifestObject.Dependency toDependency(DataPack dataPack) {
         return new DataPackManifestObject.Dependency(dataPack.getManifest().getUuid(), dataPack.getManifest().getVersion());
     }
 
 
-    private static class MockDataPack implements APIDataPack {
+    private static class MockDataPack extends DataPack {
 
         private final MockManifestObject manifest;
 
 
-        public MockDataPack() {
+        public MockDataPack() throws IOException {
             this(Collections.emptySet());
         }
 
-        public MockDataPack(Set<DataPackManifestObject.Dependency> dependencies) {
+        public MockDataPack(Set<DataPackManifestObject.Dependency> dependencies) throws IOException {
+            super(null, new DataPackProvider() {
+                @Override
+                public String getDataPackName() {
+                    return null;
+                }
+
+                @Override
+                public JsonObject getFile(String path) {
+                    JsonObject manifestFile = new JsonObject();
+                    manifestFile.addProperty("version", 1);
+                    manifestFile.add("dependencies", new JsonArray());
+
+                    JsonObject infoObj = new JsonObject();
+                    infoObj.addProperty("uuid", UUID.randomUUID().toString());
+                    infoObj.addProperty("description", "str");
+                    infoObj.addProperty("name", "str");
+                    infoObj.addProperty("version", 1);
+                    infoObj.addProperty("author", "str");
+
+                    manifestFile.add("info", infoObj);
+
+                    return manifestFile;
+                }
+
+                @Override
+                public String[] getFiles(String rootDirPath, boolean recursive) {
+                    return new String[0];
+                }
+
+            });
             this.manifest = new MockManifestObject(UUID.randomUUID(), 1, "", "", "", 1, dependencies);
         }
 
         @Override
-        public void register() throws IOException {
-
-        }
+        public void register() throws IOException {}
 
         @Override
-        public void unregister() {
-
-        }
+        public void unregister() {}
 
         @Override
         public MockManifestObject getManifest() {
@@ -113,7 +141,7 @@ public class DataPackRegistryTest {
 
     }
 
-    public static class MockManifestObject extends DataPackManifestObject {
+    private static class MockManifestObject extends DataPackManifestObject {
 
         private Set<Dependency> dependencies;
 

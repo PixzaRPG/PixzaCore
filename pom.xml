@@ -10,7 +10,6 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>pixzacore-datapacks</module>
-        <module>pixzacore-api</module>
         <module>pixzacore-spigot</module>
         <module>pixzacore-loadbalancing</module>
         <module>pixzacore-commons</module>

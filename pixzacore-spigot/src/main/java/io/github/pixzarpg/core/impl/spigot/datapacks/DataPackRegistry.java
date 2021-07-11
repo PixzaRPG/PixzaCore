@@ -1,6 +1,5 @@
 package io.github.pixzarpg.core.impl.spigot.datapacks;
 
-import io.github.pixzarpg.core.api.datapacks.APIDataPack;
 import io.github.pixzarpg.core.datapacks.api.DataPackManifestObject;
 import io.github.pixzarpg.core.impl.spigot.exceptions.datapacks.CircularDependencyException;
 import io.github.pixzarpg.core.impl.spigot.exceptions.datapacks.MissingDependencyException;
@@ -13,10 +12,10 @@ import java.util.function.BiConsumer;
 
 public class DataPackRegistry {
 
-    private final Map<UUID, APIDataPack> dataPacks;
+    private final Map<UUID, DataPack> dataPacks;
     private final Map<UUID, Status> dataPackLoadStatuses;
 
-    public DataPackRegistry(Map<UUID, APIDataPack> dataPacks) {
+    public DataPackRegistry(Map<UUID, DataPack> dataPacks) {
         this.dataPacks = dataPacks;
         this.dataPackLoadStatuses = new HashMap<UUID, Status>(){
             {
@@ -29,7 +28,7 @@ public class DataPackRegistry {
      * Attempt to register all data packs regardless of if a data pack mid-registration fails to register
      * @param exceptionHandler handler when registration of a datapack fails
      */
-    public void registerAll(BiConsumer<APIDataPack, IOException> exceptionHandler) {
+    public void registerAll(BiConsumer<DataPack, IOException> exceptionHandler) {
         this.dataPacks.values()
                 .forEach(dataPack -> {
                     try {
@@ -40,7 +39,7 @@ public class DataPackRegistry {
                 });
     }
 
-    public void register(APIDataPack dataPack) throws IOException {
+    public void register(DataPack dataPack) throws IOException {
         if (this.dataPackLoadStatuses.get(dataPack.getManifest().getUuid()) != Status.LOADED) {
             this.dataPackLoadStatuses.put(dataPack.getManifest().getUuid(), Status.LOADING);
 
@@ -54,7 +53,7 @@ public class DataPackRegistry {
                     throw new MissingDependencyException("Missing dependency " + dependency.getUuid() + " (no dependency found)");
                 }
 
-                APIDataPack dependencyDataPack = this.dataPacks.get(dependency.getUuid());
+                DataPack dependencyDataPack = this.dataPacks.get(dependency.getUuid());
                 if (dependencyDataPack.getManifest().getVersion() != dependency.getVersion()) {
                     this.dataPackLoadStatuses.put(dependency.getUuid(), Status.FAILED);
                     throw new MissingDependencyException("Missing dependency " + dependency.getUuid() + " (Invalid version)");
@@ -91,7 +90,7 @@ public class DataPackRegistry {
         this.dataPacks.values().forEach(this::unregister);
     }
 
-    public void unregister(APIDataPack dataPack) {
+    public void unregister(DataPack dataPack) {
         dataPack.unregister();
     }
 

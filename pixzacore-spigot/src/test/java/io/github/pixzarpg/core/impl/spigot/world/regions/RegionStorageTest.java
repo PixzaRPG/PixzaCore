@@ -1,6 +1,5 @@
 package io.github.pixzarpg.core.impl.spigot.world.regions;
 
-import io.github.pixzarpg.core.api.world.regions.APIWorldRegion;
 import io.github.pixzarpg.core.commons.Vector3;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +13,7 @@ public class RegionStorageTest {
     @Test
     public void shouldFetchRegionsIfRegionFound() {
 
-        APIWorldRegion targetWorldRegion = new WorldRegion.Builder()
+        WorldRegion targetWorldRegion = new WorldRegion.Builder()
                 .setUuid(UUID.randomUUID())
                 .setBoundaries(new Vector3(0, 0, 0), new Vector3(10, 10, 10))
                 .build();
@@ -22,7 +21,7 @@ public class RegionStorageTest {
         RegionStorage storage = new RegionStorage();
         storage.register(targetWorldRegion);
 
-        Set<APIWorldRegion> regions = storage.getRegions(new Vector3(5, 5, 5));
+        Set<WorldRegion> regions = storage.getRegions(new Vector3(5, 5, 5));
 
         assertEquals(1, regions.size());
         assertEquals(targetWorldRegion, regions.stream().findAny().get());

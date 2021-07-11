@@ -1,7 +1,6 @@
 package io.github.pixzarpg.core.impl.spigot.world.regions;
 
-import io.github.pixzarpg.core.api.world.regions.APIWorldRegion;
-import io.github.pixzarpg.core.api.world.regions.flags.APIRegionFlag;
+import io.github.pixzarpg.core.impl.spigot.world.regions.flags.RegionFlag;
 import io.github.pixzarpg.core.commons.Boundaries;
 import io.github.pixzarpg.core.commons.Vector3;
 
@@ -12,23 +11,23 @@ import java.util.UUID;
 /**
  * An RPG area that has special modifiers
  */
-public class WorldRegion implements APIWorldRegion {
+public class WorldRegion {
 
     private final UUID uuid;
     private final String description;
 
     private final Boundaries boundaries;
 
-    private final Set<APIRegionFlag> flags;
-    private final Set<APIWorldRegion> subRegions;
+    private final Set<RegionFlag> flags;
+    private final Set<WorldRegion> subRegions;
 
 
     private WorldRegion(
             UUID uuid,
             String description,
             Boundaries boundaries,
-            Set<APIRegionFlag> flags,
-            Set<APIWorldRegion> subRegions
+            Set<RegionFlag> flags,
+            Set<WorldRegion> subRegions
     ) {
         this.uuid = uuid;
         this.description = description;
@@ -37,28 +36,23 @@ public class WorldRegion implements APIWorldRegion {
         this.subRegions = subRegions;
     }
 
-    @Override
     public UUID getUuid() {
         return this.uuid;
     }
 
-    @Override
     public String getDescription() {
         return this.description;
     }
 
-    @Override
     public Boundaries getBoundaries() {
         return this.boundaries;
     }
 
-    @Override
-    public Set<APIRegionFlag> getFlags() {
+    public Set<RegionFlag> getFlags() {
         return this.flags;
     }
 
-    @Override
-    public Set<APIWorldRegion> getSubRegions() {
+    public Set<WorldRegion> getSubRegions() {
         return this.subRegions;
     }
 
@@ -70,8 +64,8 @@ public class WorldRegion implements APIWorldRegion {
 
         private Boundaries boundaries;
 
-        private Set<APIRegionFlag> flags = Collections.emptySet();
-        private Set<APIWorldRegion> subRegions = Collections.emptySet();
+        private Set<RegionFlag> flags = Collections.emptySet();
+        private Set<WorldRegion> subRegions = Collections.emptySet();
 
 
         public Builder setUuid(UUID uuid) {
@@ -89,12 +83,12 @@ public class WorldRegion implements APIWorldRegion {
             return this;
         }
 
-        public Builder setFlags(Set<APIRegionFlag> flags) {
+        public Builder setFlags(Set<RegionFlag> flags) {
             this.flags = flags;
             return this;
         }
 
-        public Builder setSubRegions(Set<APIWorldRegion> subRegions) {
+        public Builder setSubRegions(Set<WorldRegion> subRegions) {
             this.subRegions = subRegions;
             return this;
         }

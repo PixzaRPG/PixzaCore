@@ -1,6 +1,6 @@
 package io.github.pixzarpg.core.impl.spigot.events.world.regions;
 
-import io.github.pixzarpg.core.api.world.regions.APIWorldRegion;
+import io.github.pixzarpg.core.impl.spigot.world.regions.WorldRegion;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
@@ -15,7 +15,7 @@ public class EnterWorldRegionEvent extends WorldRegionEvent implements Cancellab
     private boolean cancelled;
 
 
-    public EnterWorldRegionEvent(Player who, APIWorldRegion worldRegion) {
+    public EnterWorldRegionEvent(Player who, WorldRegion worldRegion) {
         super(who, worldRegion);
     }
 

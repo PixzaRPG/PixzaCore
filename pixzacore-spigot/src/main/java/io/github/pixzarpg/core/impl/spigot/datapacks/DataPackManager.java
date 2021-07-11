@@ -1,7 +1,6 @@
 package io.github.pixzarpg.core.impl.spigot.datapacks;
 
 import com.google.gson.JsonParseException;
-import io.github.pixzarpg.core.api.datapacks.APIDataPack;
 import io.github.pixzarpg.core.impl.spigot.RPGManager;
 import io.github.pixzarpg.core.datapacks.providers.FolderDataPackProvider;
 import io.github.pixzarpg.core.impl.spigot.utils.TextUtils;
@@ -16,7 +15,7 @@ public class DataPackManager {
     private final static String LOG_PREFIX = "DataPacks";
 
     private final RPGManager manager;
-    private final Map<UUID, APIDataPack> dataPacks = new HashMap<>();
+    private final Map<UUID, DataPack> dataPacks = new HashMap<>();
 
     private DataPackRegistry registry;
 
