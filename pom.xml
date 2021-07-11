@@ -11,7 +11,7 @@
     <modules>
         <module>pixzacore-datapacks</module>
         <module>pixzacore-api</module>
-        <module>pixzacore-impl</module>
+        <module>pixzacore-spigot</module>
         <module>pixzacore-loadbalancing</module>
         <module>pixzacore-commons</module>
     </modules>

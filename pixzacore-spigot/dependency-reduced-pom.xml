@@ -6,8 +6,8 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>io.github.pixzarpg.core.impl</groupId>
-  <artifactId>PixzaCore-Impl</artifactId>
+  <groupId>io.github.pixzarpg.core.impl.spigot</groupId>
+  <artifactId>PixzaCore-Spigot</artifactId>
   <build>
     <plugins>
       <plugin>
