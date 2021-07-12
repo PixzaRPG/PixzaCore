@@ -11,13 +11,14 @@ public class WorldManager {
     private final static String LOG_PREFIX = "WorldManager";
 
     private final RPGManager manager;
-    private final RegionManager regionManager = new RegionManager(this);
+    private final RegionManager regionManager;
 
     private World rpgWorld;
 
 
     public WorldManager(RPGManager manager) {
         this.manager = manager;
+        this.regionManager = new RegionManager(this);
     }
 
     public void initialize() {

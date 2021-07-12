@@ -8,11 +8,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class RPGManager {
 
-    private final DataPackManager dataPackManager = new DataPackManager(this);
-    private final WorldManager worldManager = new WorldManager(this);
-    private final RPGEntityManager entityManager = new RPGEntityManager();
-
-    private final ItemManager itemManager = new ItemManager(this);
+    private final DataPackManager dataPackManager;
+    private final WorldManager worldManager;
+    private final ItemManager itemManager;
+    private final RPGEntityManager entityManager;
 
     private final RPGConfig config;
     private final JavaPlugin plugin;
@@ -21,6 +20,11 @@ public class RPGManager {
     public RPGManager(RPGConfig config, JavaPlugin plugin) {
         this.config = config;
         this.plugin = plugin;
+
+        this.dataPackManager = new DataPackManager(this);
+        this.worldManager = new WorldManager(this);
+        this.itemManager = new ItemManager(this);
+        this.entityManager = new RPGEntityManager(this);
 
         this.worldManager.initialize();
         this.dataPackManager.load();
