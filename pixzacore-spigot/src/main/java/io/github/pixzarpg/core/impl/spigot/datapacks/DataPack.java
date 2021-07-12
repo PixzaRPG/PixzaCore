@@ -2,15 +2,19 @@ package io.github.pixzarpg.core.impl.spigot.datapacks;
 
 import com.google.gson.JsonObject;
 import io.github.pixzarpg.core.datapacks.DataPackFileParserRegistry;
-import io.github.pixzarpg.core.datapacks.api.DataPackItemObject;
+import io.github.pixzarpg.core.datapacks.api.items.DataPackItemObject;
 import io.github.pixzarpg.core.datapacks.api.DataPackManifestObject;
-import io.github.pixzarpg.core.datapacks.api.DataPackRegionObject;
+import io.github.pixzarpg.core.datapacks.api.regions.DataPackRegionObject;
 import io.github.pixzarpg.core.datapacks.providers.DataPackProvider;
+import io.github.pixzarpg.core.impl.spigot.items.RPGItemType;
+import io.github.pixzarpg.core.impl.spigot.items.components.ItemComponentResolver;
 import io.github.pixzarpg.core.impl.spigot.world.regions.WorldRegion;
+import org.bukkit.Material;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class DataPack {
 
@@ -35,6 +39,10 @@ public class DataPack {
 
         // Parse ONLY the manifest for the dependencies
         this.manifest = this.registry.getManifestParser().parse(provider.getFile("manifest.json"));
+    }
+
+    public DataPackManager getManager() {
+        return this.manager;
     }
 
     /**
@@ -70,7 +78,13 @@ public class DataPack {
         String[] itemFiles = this.provider.getFiles("/items", true);
         for (String itemFilePath : itemFiles) {
             DataPackItemObject itemObject = this.registry.getItemParser().parse(this.provider.getFile(itemFilePath));
-            // TODO: ItemRegistry: register item
+            RPGItemType itemType = new RPGItemType(
+                    this.getManager().getRPGManager(),
+                    itemObject.getUuid(),
+                    Material.getMaterial(itemObject.getMinecraftItemId()),
+                    itemObject.getComponents().stream().map(ItemComponentResolver::resolve).collect(Collectors.toSet()));
+
+            this.getManager().getRPGManager().getItemRegistry().register(itemType);
         }
     }
 

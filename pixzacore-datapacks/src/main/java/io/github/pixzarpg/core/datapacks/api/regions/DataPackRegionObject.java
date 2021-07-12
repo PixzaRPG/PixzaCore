@@ -1,4 +1,4 @@
-package io.github.pixzarpg.core.datapacks.api;
+package io.github.pixzarpg.core.datapacks.api.regions;
 
 import com.google.gson.JsonObject;
 import io.github.pixzarpg.core.commons.Vector3;

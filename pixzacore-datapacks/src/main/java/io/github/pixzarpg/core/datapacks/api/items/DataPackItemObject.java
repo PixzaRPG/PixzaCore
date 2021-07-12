@@ -1,6 +1,7 @@
-package io.github.pixzarpg.core.datapacks.api;
+package io.github.pixzarpg.core.datapacks.api.items;
 
 import com.google.gson.JsonObject;
+import io.github.pixzarpg.core.datapacks.api.items.components.data.ItemComponent;
 
 import java.util.Collections;
 import java.util.Set;
@@ -29,28 +30,6 @@ public class DataPackItemObject {
 
     public Set<ItemComponent> getComponents() {
         return Collections.unmodifiableSet(this.components);
-    }
-
-
-    public static class ItemComponent {
-
-        private final String type;
-        private final JsonObject data;
-
-
-        public ItemComponent(String type, JsonObject data) {
-            this.type = type;
-            this.data = data;
-        }
-
-        public String getType() {
-            return this.type;
-        }
-
-        public JsonObject getData() {
-            return this.data;
-        }
-
     }
 
 }

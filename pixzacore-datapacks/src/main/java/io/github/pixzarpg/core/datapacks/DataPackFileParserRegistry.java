@@ -1,8 +1,8 @@
 package io.github.pixzarpg.core.datapacks;
 
-import io.github.pixzarpg.core.datapacks.api.DataPackItemObject;
+import io.github.pixzarpg.core.datapacks.api.items.DataPackItemObject;
 import io.github.pixzarpg.core.datapacks.api.DataPackManifestObject;
-import io.github.pixzarpg.core.datapacks.api.DataPackRegionObject;
+import io.github.pixzarpg.core.datapacks.api.regions.DataPackRegionObject;
 import io.github.pixzarpg.core.datapacks.versions.v1.V1DataPackFileParserRegistry;
 
 import java.util.Collections;
