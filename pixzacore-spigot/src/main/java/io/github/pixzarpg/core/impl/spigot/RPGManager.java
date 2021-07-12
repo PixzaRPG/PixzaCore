@@ -2,7 +2,7 @@ package io.github.pixzarpg.core.impl.spigot;
 
 import io.github.pixzarpg.core.impl.spigot.datapacks.DataPackManager;
 import io.github.pixzarpg.core.impl.spigot.entities.RPGEntityManager;
-import io.github.pixzarpg.core.impl.spigot.items.ItemRegistry;
+import io.github.pixzarpg.core.impl.spigot.items.ItemManager;
 import io.github.pixzarpg.core.impl.spigot.world.WorldManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -12,7 +12,7 @@ public class RPGManager {
     private final WorldManager worldManager = new WorldManager(this);
     private final RPGEntityManager entityManager = new RPGEntityManager();
 
-    private final ItemRegistry itemRegistry = new ItemRegistry(this);
+    private final ItemManager itemManager = new ItemManager(this);
 
     private final RPGConfig config;
     private final JavaPlugin plugin;
@@ -46,8 +46,8 @@ public class RPGManager {
         return this.entityManager;
     }
 
-    public ItemRegistry getItemRegistry() {
-        return this.itemRegistry;
+    public ItemManager getItemManager() {
+        return this.itemManager;
     }
 
 }

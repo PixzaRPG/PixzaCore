@@ -79,12 +79,12 @@ public class DataPack {
         for (String itemFilePath : itemFiles) {
             DataPackItemObject itemObject = this.registry.getItemParser().parse(this.provider.getFile(itemFilePath));
             RPGItemType itemType = new RPGItemType(
-                    this.getManager().getRPGManager(),
+                    this.getManager().getRPGManager().getItemManager(),
                     itemObject.getUuid(),
                     Material.getMaterial(itemObject.getMinecraftItemId()),
-                    itemObject.getComponents().stream().map(ItemComponentResolver::resolve).collect(Collectors.toSet()));
+                    itemObject.getComponents().stream().map(component -> ItemComponentResolver.resolve(this.getManager().getRPGManager(), component)).collect(Collectors.toSet()));
 
-            this.getManager().getRPGManager().getItemRegistry().register(itemType);
+            this.getManager().getRPGManager().getItemManager().register(itemType);
         }
     }
 

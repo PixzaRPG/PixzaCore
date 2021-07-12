@@ -7,10 +7,12 @@ public class RPGItem {
 
     private final ItemStack itemStack;
     private final LivingEntity owner;
+    private final RPGItemType itemType;
 
 
-    public RPGItem(LivingEntity owner, ItemStack itemStack) {
+    public RPGItem(LivingEntity owner, RPGItemType itemType, ItemStack itemStack) {
         this.owner = owner;
+        this.itemType = itemType;
         this.itemStack = itemStack;
     }
 
@@ -20,6 +22,10 @@ public class RPGItem {
 
     public ItemStack getItemStack() {
         return this.itemStack;
+    }
+
+    public RPGItemType getItemType() {
+        return this.itemType;
     }
 
 }

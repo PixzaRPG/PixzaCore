@@ -1,6 +1,5 @@
 package io.github.pixzarpg.core.impl.spigot.items;
 
-import io.github.pixzarpg.core.impl.spigot.RPGManager;
 import io.github.pixzarpg.core.impl.spigot.items.components.ItemComponent;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
@@ -15,14 +14,14 @@ public class RPGItemType {
     private final Material material;
     private final Set<ItemComponent> components;
 
-    private final RPGManager rpgManager;
+    private final ItemManager itemManager;
 
 
-    public RPGItemType(RPGManager manager, UUID uuid, Material material, Set<ItemComponent> components) {
+    public RPGItemType(ItemManager manager, UUID uuid, Material material, Set<ItemComponent> components) {
         this.uuid = uuid;
         this.material = material;
         this.components = components;
-        this.rpgManager = manager;
+        this.itemManager = manager;
     }
 
     public UUID getUuid() {
@@ -37,14 +36,13 @@ public class RPGItemType {
         return this.components;
     }
 
-    public RPGManager getRPGManager() {
-        return this.rpgManager;
+    public ItemManager getItemManager() {
+        return this.itemManager;
     }
 
     public RPGItem constructFor(LivingEntity entity) {
         ItemStack itemStack = new ItemStack(this.material);
-        RPGItem item = new RPGItem(entity, itemStack);
-        return item;
+        return new RPGItem(entity, this, itemStack);
     }
 
 }

@@ -1,6 +1,7 @@
 package io.github.pixzarpg.core.impl.spigot.items.components;
 
 import io.github.pixzarpg.core.datapacks.api.items.ItemComponentType;
+import io.github.pixzarpg.core.impl.spigot.RPGManager;
 import io.github.pixzarpg.core.impl.spigot.items.RPGItem;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -11,7 +12,8 @@ public class LoreItemComponent extends ItemComponent {
     private final List<String> lines;
 
 
-    public LoreItemComponent(io.github.pixzarpg.core.datapacks.api.items.components.data.LoreItemComponent component) {
+    public LoreItemComponent(RPGManager rpgManager, io.github.pixzarpg.core.datapacks.api.items.components.data.LoreItemComponent component) {
+        super(rpgManager);
         this.lines = component.getLines();
     }
 
@@ -26,9 +28,11 @@ public class LoreItemComponent extends ItemComponent {
 
     @Override
     public void onItemCreated(RPGItem item) {
-        ItemMeta meta = item.getItemStack().getItemMeta();
-        meta.setLore(this.lines);
-        item.getItemStack().setItemMeta(meta);
+        if (!this.wasAppliedAlready(item.getItemStack())) {
+            ItemMeta meta = item.getItemStack().getItemMeta();
+            meta.setLore(this.lines);
+            item.getItemStack().setItemMeta(meta);
+        }
     }
 
 }
