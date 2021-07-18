@@ -2,9 +2,7 @@ package io.github.pixzarpg.core.impl.spigot.items;
 
 import io.github.pixzarpg.core.impl.spigot.RPGManager;
 import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityPickupItemEvent;
 
 import java.util.HashMap;
 import java.util.Map;

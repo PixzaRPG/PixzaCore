@@ -16,12 +16,6 @@ public class NMSRPGZombieEntityV1_16_5_R01 extends EntityZombie {
     }
 
     @Override
-    protected void bN() {
-        super.bN();
-        this.rpgManager.getEntityManager().remove((LivingEntity)this.getBukkitEntity());
-    }
-
-    @Override
     public void die() {
         super.die();
         this.rpgManager.getEntityManager().remove((LivingEntity)this.getBukkitEntity());

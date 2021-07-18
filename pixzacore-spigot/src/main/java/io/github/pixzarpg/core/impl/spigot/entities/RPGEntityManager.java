@@ -47,6 +47,7 @@ public class RPGEntityManager implements Listener {
     }
 
     public void remove(LivingEntity entity) {
+        this.rpgManager.getPlugin().getLogger().info("despawned");
         this.entities.remove(entity.getEntityId());
     }
 
@@ -58,7 +59,6 @@ public class RPGEntityManager implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         this.remove(event.getPlayer());
     }
-
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
