@@ -12,7 +12,7 @@ public class RPGEntity {
 
     // TODO: This should accept a datapack entity object or something
     public RPGEntity() {
-
+//it's too easy
     }
 
     public LivingEntity getEntity() {

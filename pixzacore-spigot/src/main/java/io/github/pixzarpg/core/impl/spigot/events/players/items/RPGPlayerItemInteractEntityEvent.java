@@ -1,14 +1,15 @@
 package io.github.pixzarpg.core.impl.spigot.events.players.items;
 
+import io.github.pixzarpg.core.impl.spigot.entities.RPGPlayer;
+import io.github.pixzarpg.core.impl.spigot.events.players.RPGPlayerEvent;
 import io.github.pixzarpg.core.impl.spigot.items.RPGItem;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerEvent;
 
-public class RPGPlayerItemInteractEntityEvent extends PlayerEvent implements Cancellable {
+public class RPGPlayerItemInteractEntityEvent extends RPGPlayerEvent implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
@@ -16,7 +17,7 @@ public class RPGPlayerItemInteractEntityEvent extends PlayerEvent implements Can
     private final Entity entity;
     private boolean cancelled;
 
-    public RPGPlayerItemInteractEntityEvent(Player who, RPGItem rpgItem, Entity entity) {
+    public RPGPlayerItemInteractEntityEvent(RPGPlayer who, RPGItem rpgItem, Entity entity) {
         super(who);
         this.rpgItem = rpgItem;
         this.entity = entity;

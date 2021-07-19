@@ -44,6 +44,15 @@ public class RPGEntityManager implements Listener {
         return this.entities.get(entity.getEntityId());
     }
 
+    public RPGPlayer get(Player player) {
+        if (!this.entities.containsKey(player.getEntityId())) {
+            RPGPlayer rpgPlayer = new RPGPlayer(player);
+            this.entities.put(player.getEntityId(), rpgPlayer);
+        }
+        return (RPGPlayer)this.entities.get(player.getEntityId());
+    }
+
+
     public void remove(RPGEntity rpgEntity) {
         this.remove(rpgEntity.getEntity());
     }

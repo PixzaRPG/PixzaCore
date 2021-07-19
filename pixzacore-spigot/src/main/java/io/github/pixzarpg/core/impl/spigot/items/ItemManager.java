@@ -1,6 +1,7 @@
 package io.github.pixzarpg.core.impl.spigot.items;
 
 import io.github.pixzarpg.core.impl.spigot.RPGManager;
+import io.github.pixzarpg.core.impl.spigot.entities.RPGPlayer;
 import io.github.pixzarpg.core.impl.spigot.events.players.items.RPGPlayerItemInteractBlockEvent;
 import io.github.pixzarpg.core.impl.spigot.events.players.items.RPGPlayerItemInteractEntityEvent;
 import io.github.pixzarpg.core.impl.spigot.items.components.ItemComponent;
@@ -130,7 +131,8 @@ public class ItemManager implements Listener {
         ItemStack heldItem = event.getItem();
         RPGItem rpgItem = this.getRPGItem(heldItem);
         if (rpgItem != null) {
-            RPGPlayerItemInteractBlockEvent rpgEvent = new RPGPlayerItemInteractBlockEvent(event.getPlayer(), rpgItem, event.getClickedBlock());
+            RPGPlayer rpgPlayer = this.getRPGManager().getEntityManager().get(event.getPlayer());
+            RPGPlayerItemInteractBlockEvent rpgEvent = new RPGPlayerItemInteractBlockEvent(rpgPlayer, rpgItem, event.getClickedBlock());
             Bukkit.getPluginManager().callEvent(rpgEvent);
             if (rpgEvent.isCancelled()) {
                 event.setCancelled(true);
@@ -149,7 +151,8 @@ public class ItemManager implements Listener {
         ItemStack heldItem = event.getPlayer().getInventory().getItemInMainHand();
         RPGItem rpgItem = this.getRPGItem(heldItem);
         if (rpgItem != null) {
-            RPGPlayerItemInteractEntityEvent rpgEvent = new RPGPlayerItemInteractEntityEvent(event.getPlayer(), rpgItem, event.getRightClicked());
+            RPGPlayer rpgPlayer = this.getRPGManager().getEntityManager().get(event.getPlayer());
+            RPGPlayerItemInteractEntityEvent rpgEvent = new RPGPlayerItemInteractEntityEvent(rpgPlayer, rpgItem, event.getRightClicked());
             Bukkit.getPluginManager().callEvent(rpgEvent);
             if (rpgEvent.isCancelled()) {
                 event.setCancelled(true);

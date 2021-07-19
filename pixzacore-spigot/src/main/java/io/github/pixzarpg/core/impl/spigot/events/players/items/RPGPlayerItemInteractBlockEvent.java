@@ -1,16 +1,16 @@
 package io.github.pixzarpg.core.impl.spigot.events.players.items;
 
+import io.github.pixzarpg.core.impl.spigot.entities.RPGPlayer;
+import io.github.pixzarpg.core.impl.spigot.events.players.RPGPlayerEvent;
 import io.github.pixzarpg.core.impl.spigot.items.RPGItem;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerEvent;
 
 /**
  * Called when a player interacts with a block using an RPGItem
  */
-public class RPGPlayerItemInteractBlockEvent extends PlayerEvent implements Cancellable {
+public class RPGPlayerItemInteractBlockEvent extends RPGPlayerEvent implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
@@ -18,7 +18,7 @@ public class RPGPlayerItemInteractBlockEvent extends PlayerEvent implements Canc
     private final Block block;
     private boolean cancelled;
 
-    public RPGPlayerItemInteractBlockEvent(Player who, RPGItem rpgItem, Block block) {
+    public RPGPlayerItemInteractBlockEvent(RPGPlayer who, RPGItem rpgItem, Block block) {
         super(who);
         this.rpgItem = rpgItem;
         this.block = block;
