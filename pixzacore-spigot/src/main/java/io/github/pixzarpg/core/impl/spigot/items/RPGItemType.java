@@ -2,8 +2,6 @@ package io.github.pixzarpg.core.impl.spigot.items;
 
 import io.github.pixzarpg.core.impl.spigot.items.components.ItemComponent;
 import org.bukkit.Material;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Set;
 import java.util.UUID;
@@ -41,8 +39,7 @@ public class RPGItemType {
     }
 
     public RPGItem create() {
-        ItemStack itemStack = new ItemStack(this.material);
-        return new RPGItem(this, itemStack);
+        return new RPGItem(this);
     }
 
 }

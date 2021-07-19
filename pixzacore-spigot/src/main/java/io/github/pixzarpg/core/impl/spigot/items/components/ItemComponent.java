@@ -4,6 +4,7 @@ import io.github.pixzarpg.core.datapacks.api.items.ItemComponentType;
 import io.github.pixzarpg.core.impl.spigot.RPGManager;
 import io.github.pixzarpg.core.impl.spigot.items.RPGItem;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -24,12 +25,20 @@ public abstract class ItemComponent {
     public void onItemUsage(RPGItem item) {}
 
     /**
-     * Called when the owner interacts (right click) with a entity
+     * Called when the user interacts (right click) using an RPGItem
      * @param user the entity who owns the item
      * @param target The entity interacted with
      * @param item The item used
      */
     public void onItemEntityInteract(Entity user, Entity target, RPGItem item) {}
+
+    /**
+     * Called when the user interacts with a block using an RPGItem
+     * @param user the entity who owns the item
+     * @param block the block interacted with
+     * @param item the block used
+     */
+    public void onItemBlockInteract(Entity user, Block block, RPGItem item) {}
 
     public void onItemAttack(Entity user, Entity target, RPGItem item) {}
 

@@ -2,12 +2,14 @@ package io.github.pixzarpg.core.impl.spigot.entities;
 
 import io.github.pixzarpg.core.impl.spigot.RPGManager;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,6 +65,15 @@ public class RPGEntityManager implements Listener {
     public void onEntityDeath(EntityDeathEvent event) {
         if (!(event.getEntity() instanceof Player)) {   // Players can respawn
             this.remove(event.getEntity());
+        }
+    }
+
+    @EventHandler
+    public void onEntityChunkUnload(ChunkUnloadEvent event) {
+        for (Entity entity : event.getChunk().getEntities()) {
+            if (entity instanceof LivingEntity) {
+                this.remove((LivingEntity)entity);
+            }
         }
     }
 

@@ -8,6 +8,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class RPGManager {
 
+    private static RPGManager INSTANCE;
+
     private final DataPackManager dataPackManager;
     private final WorldManager worldManager;
     private final ItemManager itemManager;
@@ -17,7 +19,7 @@ public class RPGManager {
     private final JavaPlugin plugin;
 
 
-    public RPGManager(RPGConfig config, JavaPlugin plugin) {
+    protected RPGManager(RPGConfig config, JavaPlugin plugin) {
         this.config = config;
         this.plugin = plugin;
 
@@ -52,6 +54,22 @@ public class RPGManager {
 
     public ItemManager getItemManager() {
         return this.itemManager;
+    }
+
+
+    public static RPGManager create(RPGConfig config, JavaPlugin plugin) {
+        if (INSTANCE != null) {
+            throw new IllegalStateException("Attempted to create RPGManager twice");
+        }
+        INSTANCE = new RPGManager(config, plugin);
+        return INSTANCE;
+    }
+
+    public static RPGManager getInstance() {
+        if (INSTANCE == null) {
+            throw new IllegalStateException("Attempted to get instance before instance was created");
+        }
+        return INSTANCE;
     }
 
 }
