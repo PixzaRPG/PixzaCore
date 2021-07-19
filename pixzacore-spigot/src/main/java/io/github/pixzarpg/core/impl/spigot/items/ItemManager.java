@@ -7,15 +7,19 @@ import io.github.pixzarpg.core.impl.spigot.events.players.items.RPGPlayerItemInt
 import io.github.pixzarpg.core.impl.spigot.items.components.ItemComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.CraftingInventory;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataType;
@@ -95,7 +99,7 @@ public class ItemManager implements Listener {
         return item;
     }
 
-    // Remove RPGItems in a player's inventory from cache
+    // Cleanup: Remove RPGItems in a player's inventory from cache on quit
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         for (ItemStack itemStack : event.getPlayer().getInventory()) {
@@ -106,16 +110,25 @@ public class ItemManager implements Listener {
         }
     }
 
-    // Remove RPGItem from cache on rpg item dropped
+    // Cleanup: Remove RPGItem from cache on rpg item dropped
+    // Additionally, this handles checking an item's components if the item can be dropped.
     @EventHandler
     public void onItemDropped(EntityDropItemEvent event) {
         RPGItem rpgItem = this.getRPGItem(event.getItemDrop().getItemStack());
         if (rpgItem != null) {
+            for (ItemComponent component : rpgItem.getItemType().getComponents()) {
+                if (!component.canLose()) {
+                    event.setCancelled(true);
+                    return;
+                }
+            }
+
+            // It's okay to drop this item. Remove it from the cache
             this.unregisterActiveItem(rpgItem);
         }
     }
 
-    // Remove RPGItem from cache on moving to diff inventory
+    // Cleanup: Remove RPGItem from cache on moving to diff inventory
     @EventHandler
     public void onMoveRPGItemToDiffInventory(InventoryMoveItemEvent event) {
         if (!event.getDestination().equals(event.getInitiator()) && !((event.getDestination() instanceof PlayerInventory) || (event.getDestination() instanceof CraftingInventory))) {
@@ -164,6 +177,35 @@ public class ItemManager implements Listener {
 
             for (ItemComponent component : rpgItem.getItemType().getComponents()) {
                 component.onItemEntityInteract(event.getPlayer(), event.getRightClicked(), rpgItem);
+            }
+        }
+    }
+
+    // Call component's attack for RPGItems
+    @EventHandler
+    public void onItemAttack(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof LivingEntity) {
+            LivingEntity attacker = (LivingEntity)event.getDamager();
+            if (attacker.getEquipment() != null) {
+                RPGItem rpgItem = this.getRPGItem(attacker.getEquipment().getItem(EquipmentSlot.HAND));
+                if (rpgItem != null) {
+                    for (ItemComponent component : rpgItem.getItemType().getComponents()) {
+                        component.onItemAttack(attacker, event.getEntity(), rpgItem);
+                    }
+
+                }
+            }
+        }
+    }
+
+    // Call component's consumption for RPGItems
+    @EventHandler
+    public void onItemUsage(PlayerItemConsumeEvent event) {
+        RPGItem rpgItem = this.getRPGItem(event.getItem());
+        if (rpgItem != null) {
+            for (ItemComponent component : rpgItem.getItemType().getComponents()) {
+                component.onItemConsumption(event.getPlayer(), rpgItem);
+
             }
         }
     }
