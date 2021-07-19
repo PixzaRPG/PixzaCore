@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -128,19 +129,21 @@ public class ItemManager implements Listener {
     // Call component's block interact for RPGItems
     @EventHandler
     public void onPlayerBlockInteract(PlayerInteractEvent event) {
-        ItemStack heldItem = event.getItem();
-        RPGItem rpgItem = this.getRPGItem(heldItem);
-        if (rpgItem != null) {
-            RPGPlayer rpgPlayer = this.getRPGManager().getEntityManager().get(event.getPlayer());
-            RPGPlayerItemInteractBlockEvent rpgEvent = new RPGPlayerItemInteractBlockEvent(rpgPlayer, rpgItem, event.getClickedBlock());
-            Bukkit.getPluginManager().callEvent(rpgEvent);
-            if (rpgEvent.isCancelled()) {
-                event.setCancelled(true);
-                return;
-            }
+        if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            ItemStack heldItem = event.getItem();
+            RPGItem rpgItem = this.getRPGItem(heldItem);
+            if (rpgItem != null) {
+                RPGPlayer rpgPlayer = this.getRPGManager().getEntityManager().get(event.getPlayer());
+                RPGPlayerItemInteractBlockEvent rpgEvent = new RPGPlayerItemInteractBlockEvent(rpgPlayer, rpgItem, event.getClickedBlock());
+                Bukkit.getPluginManager().callEvent(rpgEvent);
+                if (rpgEvent.isCancelled()) {
+                    event.setCancelled(true);
+                    return;
+                }
 
-            for (ItemComponent component : rpgItem.getItemType().getComponents()) {
-                component.onItemBlockInteract(event.getPlayer(), event.getClickedBlock(), rpgItem);
+                for (ItemComponent component : rpgItem.getItemType().getComponents()) {
+                    component.onItemBlockInteract(event.getPlayer(), event.getClickedBlock(), rpgItem);
+                }
             }
         }
     }
