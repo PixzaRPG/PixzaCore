@@ -40,9 +40,9 @@ public class RPGItemType {
         return this.itemManager;
     }
 
-    public RPGItem constructFor(LivingEntity entity) {
+    public RPGItem create() {
         ItemStack itemStack = new ItemStack(this.material);
-        return new RPGItem(entity, this, itemStack);
+        return new RPGItem(this, itemStack);
     }
 
 }

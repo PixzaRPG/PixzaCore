@@ -25,12 +25,13 @@ public abstract class ItemComponent {
 
     /**
      * Called when the owner interacts (right click) with a entity
+     * @param user the entity who owns the item
      * @param target The entity interacted with
      * @param item The item used
      */
-    public void onItemEntityInteract(Entity target, RPGItem item) {}
+    public void onItemEntityInteract(Entity user, Entity target, RPGItem item) {}
 
-    public void onItemAttack(Entity target, RPGItem item) {}
+    public void onItemAttack(Entity user, Entity target, RPGItem item) {}
 
     /**
      * Whether or not the owner can drop the item or move it into another inventory

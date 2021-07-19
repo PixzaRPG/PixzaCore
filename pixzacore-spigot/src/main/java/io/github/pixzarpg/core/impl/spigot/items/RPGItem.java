@@ -1,23 +1,21 @@
 package io.github.pixzarpg.core.impl.spigot.items;
 
-import org.bukkit.entity.LivingEntity;
+import io.github.pixzarpg.core.impl.spigot.items.components.ItemComponent;
 import org.bukkit.inventory.ItemStack;
 
 public class RPGItem {
 
     private final ItemStack itemStack;
-    private final LivingEntity owner;
     private final RPGItemType itemType;
 
 
-    public RPGItem(LivingEntity owner, RPGItemType itemType, ItemStack itemStack) {
-        this.owner = owner;
+    public RPGItem(RPGItemType itemType, ItemStack itemStack) {
         this.itemType = itemType;
         this.itemStack = itemStack;
-    }
 
-    public LivingEntity getOwner() {
-        return this.owner;
+        for (ItemComponent component : itemType.getComponents()) {
+            component.onItemCreated(this);
+        }
     }
 
     public ItemStack getItemStack() {
