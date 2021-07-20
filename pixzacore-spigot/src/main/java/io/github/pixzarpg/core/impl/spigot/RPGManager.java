@@ -1,5 +1,7 @@
 package io.github.pixzarpg.core.impl.spigot;
 
+import io.github.pixzarpg.core.impl.spigot.config.RPGConfig;
+import io.github.pixzarpg.core.impl.spigot.database.DatabaseManager;
 import io.github.pixzarpg.core.impl.spigot.datapacks.DataPackManager;
 import io.github.pixzarpg.core.impl.spigot.entities.RPGEntityManager;
 import io.github.pixzarpg.core.impl.spigot.items.ItemManager;
@@ -14,6 +16,7 @@ public class RPGManager {
     private final WorldManager worldManager;
     private final ItemManager itemManager;
     private final RPGEntityManager entityManager;
+    private final DatabaseManager databaseManager;
 
     private final RPGConfig config;
     private final JavaPlugin plugin;
@@ -23,13 +26,20 @@ public class RPGManager {
         this.config = config;
         this.plugin = plugin;
 
-        this.dataPackManager = new DataPackManager(this);
+        this.databaseManager = new DatabaseManager(this);
         this.worldManager = new WorldManager(this);
         this.itemManager = new ItemManager(this);
         this.entityManager = new RPGEntityManager(this);
+        this.dataPackManager = new DataPackManager(this);
 
         this.worldManager.initialize();
-        this.dataPackManager.load();
+        this.databaseManager.initialize();
+        this.dataPackManager.initialize();
+    }
+
+    public void close() {
+        this.databaseManager.close();
+        INSTANCE = null;
     }
 
     public RPGConfig getConfig() {

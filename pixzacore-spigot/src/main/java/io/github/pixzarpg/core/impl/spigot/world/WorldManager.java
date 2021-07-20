@@ -1,6 +1,6 @@
 package io.github.pixzarpg.core.impl.spigot.world;
 
-import io.github.pixzarpg.core.impl.spigot.RPGConfig;
+import io.github.pixzarpg.core.impl.spigot.config.RPGConfig;
 import io.github.pixzarpg.core.impl.spigot.RPGManager;
 import io.github.pixzarpg.core.impl.spigot.utils.TextUtils;
 import io.github.pixzarpg.core.impl.spigot.world.regions.RegionManager;

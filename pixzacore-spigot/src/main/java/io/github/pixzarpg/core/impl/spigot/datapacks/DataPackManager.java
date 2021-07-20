@@ -28,7 +28,7 @@ public class DataPackManager {
         return this.manager;
     }
 
-    public void load() {
+    public void initialize() {
         this.manager.getPlugin().getLogger()
                 .info(TextUtils.generateLoggerMessage(LOG_PREFIX, "Loading data packs"));
 
