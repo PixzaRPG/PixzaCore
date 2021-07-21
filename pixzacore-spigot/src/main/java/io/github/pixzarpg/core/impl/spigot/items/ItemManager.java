@@ -6,6 +6,7 @@ import io.github.pixzarpg.core.impl.spigot.events.players.items.RPGPlayerItemInt
 import io.github.pixzarpg.core.impl.spigot.events.players.items.RPGPlayerItemInteractEntityEvent;
 import io.github.pixzarpg.core.impl.spigot.items.components.ItemComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -85,9 +86,15 @@ public class ItemManager implements Listener {
         // Create a new RPGItem instance since it's not cached
 
         NamespacedKey itemTypeKey = new NamespacedKey(this.getRPGManager().getPlugin(), RPGItem.RPG_ITEM_TYPE_KEY);
-        if (!itemStack.getItemMeta().getPersistentDataContainer().has(itemTypeKey, PersistentDataType.STRING)) {
+
+        if (
+                (itemStack.getType() == Material.AIR) ||
+                (itemStack.getItemMeta().getPersistentDataContainer() == null) ||
+                !(itemStack.getItemMeta().getPersistentDataContainer().has(itemTypeKey, PersistentDataType.STRING))
+        ) {
             return null;
         }
+
         UUID itemTypeUuid = UUID.fromString(itemStack.getItemMeta().getPersistentDataContainer().get(itemTypeKey, PersistentDataType.STRING));
         if (!this.hasType(itemTypeUuid)) {
             this.getRPGManager().getPlugin().getLogger().warning("Failed to retrieve item by the UUID of " + itemTypeUuid + ". Is a data pack missing?");
@@ -103,9 +110,11 @@ public class ItemManager implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         for (ItemStack itemStack : event.getPlayer().getInventory()) {
-            RPGItem rpgItem = this.getRPGItem(itemStack);
-            if (rpgItem != null) {
-                this.unregisterActiveItem(rpgItem);
+            if (itemStack != null) {
+                RPGItem rpgItem = this.getRPGItem(itemStack);
+                if (rpgItem != null) {
+                    this.unregisterActiveItem(rpgItem);
+                }
             }
         }
     }

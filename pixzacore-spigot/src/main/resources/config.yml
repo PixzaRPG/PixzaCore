@@ -1,7 +1,7 @@
 world-name: RPG
 
 sql-ip: 0.0.0.0
-sql-port: 1433
+sql-port: 3306
 sql-database: your database here
 sql-username: your username here
 sql-password: your password here

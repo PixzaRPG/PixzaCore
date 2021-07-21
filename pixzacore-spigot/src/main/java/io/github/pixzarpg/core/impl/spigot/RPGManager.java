@@ -23,6 +23,7 @@ public class RPGManager {
 
 
     protected RPGManager(RPGConfig config, JavaPlugin plugin) {
+        INSTANCE = this;
         this.config = config;
         this.plugin = plugin;
 
@@ -66,13 +67,16 @@ public class RPGManager {
         return this.itemManager;
     }
 
+    public DatabaseManager getDatabaseManager() {
+        return this.databaseManager;
+    }
+
 
     public static RPGManager create(RPGConfig config, JavaPlugin plugin) {
         if (INSTANCE != null) {
             throw new IllegalStateException("Attempted to create RPGManager twice");
         }
-        INSTANCE = new RPGManager(config, plugin);
-        return INSTANCE;
+        return new RPGManager(config, plugin);
     }
 
     public static RPGManager getInstance() {

@@ -4,6 +4,7 @@ import io.github.pixzarpg.core.impl.spigot.config.RPGConfig;
 import io.github.pixzarpg.core.impl.spigot.RPGManager;
 import io.github.pixzarpg.core.impl.spigot.utils.TextUtils;
 import io.github.pixzarpg.core.impl.spigot.world.regions.RegionManager;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 public class WorldManager {
@@ -22,15 +23,14 @@ public class WorldManager {
     }
 
     public void initialize() {
+        RPGConfig config = this.getRPGManager().getConfig();
 
-        RPGConfig config = this.manager.getConfig();
-
-        this.rpgWorld = this.manager.getPlugin().getServer()
+        this.rpgWorld = this.getRPGManager().getPlugin().getServer()
                 .getWorld(config.getWorldName());
         if (this.rpgWorld == null) {
-            this.manager.getPlugin().getLogger()
-                .severe(TextUtils.generateLoggerMessage(LOG_PREFIX, "Could not find a world by the name of \"" + config.getWorldName() + "\""));
-            return;
+            this.rpgWorld = Bukkit.getWorlds().get(0);
+            this.getRPGManager().getPlugin().getLogger()
+                .warning(TextUtils.generateLoggerMessage(LOG_PREFIX, "Could not find a world by the name of \"" + config.getWorldName() + "\". Defaulting to world \"" + this.rpgWorld.getName() + "\""));
         }
 
         this.rpgWorld.setAutoSave(false);    // We don't want modifications to the world to persist.

@@ -1,6 +1,7 @@
 package io.github.pixzarpg.core.impl.spigot.entities;
 
 import io.github.pixzarpg.core.impl.spigot.RPGManager;
+import io.github.pixzarpg.core.impl.spigot.utils.TextUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -8,11 +9,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class RPGEntityManager implements Listener {
 
@@ -66,7 +73,46 @@ public class RPGEntityManager implements Listener {
     }
 
     @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        RPGPlayer rpgPlayer = this.get(event.getPlayer());
+        event.getPlayer().sendMessage(TextUtils.generatePlayerMessage("Data", "Loading RPG player data..."));
+        event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 0, false, false, false));
+
+        rpgPlayer.loadAsync().whenComplete((firstTime, exception) -> {
+            if (exception != null) {
+                this.getRpgManager().getPlugin().getLogger().log(Level.SEVERE, "Failed to load RPGPlayer data for " + event.getPlayer().getUniqueId(), exception);
+                event.getPlayer().kickPlayer("Failed to load RPG player data");
+            } else {
+                event.getPlayer().removePotionEffect(PotionEffectType.BLINDNESS);
+                event.getPlayer().sendMessage(TextUtils.generatePlayerMessage("Data", "Loaded!"));
+            }
+        });
+    }
+
+    // Player data must be loaded before they can move around
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        RPGPlayer rpgPlayer = this.get(event.getPlayer());
+        if (!rpgPlayer.isLoaded()) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
+        RPGPlayer rpgPlayer = this.get(event.getPlayer());
+        if (rpgPlayer.isLoaded()) {
+            try {
+                rpgPlayer.requestAsyncSave().whenComplete((ignored, exception) -> {
+                    if (exception != null) {
+                        this.getRpgManager().getPlugin().getLogger().log(Level.SEVERE, "Failed to save player " + event.getPlayer().getUniqueId(), exception);
+                    }
+                });
+            } catch (IOException exception) {
+                this.getRpgManager().getPlugin().getLogger().log(Level.SEVERE, "Failed to serialize inventory and save player " + event.getPlayer().getUniqueId(), exception);
+            }
+        }
+
         this.remove(event.getPlayer());
     }
 

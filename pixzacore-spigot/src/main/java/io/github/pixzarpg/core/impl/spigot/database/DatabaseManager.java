@@ -4,13 +4,19 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.github.pixzarpg.core.impl.spigot.RPGManager;
 import io.github.pixzarpg.core.impl.spigot.config.database.SQLDatabaseConfig;
+import io.github.pixzarpg.core.impl.spigot.database.api.player.entity.APIPlayerEntityDataRepository;
+import io.github.pixzarpg.core.impl.spigot.database.impl.player.entity.PlayerEntityDataRepository;
+import io.github.pixzarpg.core.impl.spigot.exceptions.datapacks.RepositoryException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 public class DatabaseManager {
 
     private final RPGManager rpgManager;
+
+    private final APIPlayerEntityDataRepository entityDataRepository = new PlayerEntityDataRepository(this);
 
     private HikariDataSource sqlDataSource = null;
 
@@ -22,6 +28,10 @@ public class DatabaseManager {
         return this.rpgManager;
     }
 
+    public APIPlayerEntityDataRepository getPlayerEntityDataRepository() {
+        return this.entityDataRepository;
+    }
+
     /**
      * Create all database connections
      */
@@ -29,6 +39,12 @@ public class DatabaseManager {
         this.getRPGManager().getPlugin().getLogger().info("Initializing database connections...");
         this.initializeSQLPool();
         this.getRPGManager().getPlugin().getLogger().info("Finished loading database connections");
+
+        try {
+            this.getPlayerEntityDataRepository().initialize();
+        } catch (RepositoryException exception) {
+            this.getRPGManager().getPlugin().getLogger().log(Level.SEVERE, "Failed to  repositories.", exception);
+        }
     }
 
     /**
