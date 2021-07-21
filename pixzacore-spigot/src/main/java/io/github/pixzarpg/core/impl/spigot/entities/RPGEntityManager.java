@@ -23,6 +23,8 @@ import java.util.logging.Level;
 
 public class RPGEntityManager implements Listener {
 
+    private final static String LOGGER_PREFIX = "RPGEntityManager";
+
     private final Map<Integer, RPGEntity> entities = new HashMap<>();
 
     private final RPGManager rpgManager;
@@ -80,7 +82,7 @@ public class RPGEntityManager implements Listener {
 
         rpgPlayer.loadAsync().whenComplete((firstTime, exception) -> {
             if (exception != null) {
-                this.getRpgManager().getPlugin().getLogger().log(Level.SEVERE, "Failed to load RPGPlayer data for " + event.getPlayer().getUniqueId(), exception);
+                this.getRpgManager().getPlugin().getLogger().log(Level.SEVERE, TextUtils.generateLoggerMessage(LOGGER_PREFIX, "Failed to load RPGPlayer data for " + event.getPlayer().getUniqueId()), exception);
                 event.getPlayer().kickPlayer("Failed to load RPG player data");
             } else {
                 event.getPlayer().removePotionEffect(PotionEffectType.BLINDNESS);
