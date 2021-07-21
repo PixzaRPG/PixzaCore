@@ -153,18 +153,20 @@ public class ItemManager implements Listener {
     public void onPlayerBlockInteract(PlayerInteractEvent event) {
         if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             ItemStack heldItem = event.getItem();
-            RPGItem rpgItem = this.getRPGItem(heldItem);
-            if (rpgItem != null) {
-                RPGPlayer rpgPlayer = this.getRPGManager().getEntityManager().get(event.getPlayer());
-                RPGPlayerItemInteractBlockEvent rpgEvent = new RPGPlayerItemInteractBlockEvent(rpgPlayer, rpgItem, event.getClickedBlock());
-                Bukkit.getPluginManager().callEvent(rpgEvent);
-                if (rpgEvent.isCancelled()) {
-                    event.setCancelled(true);
-                    return;
-                }
+            if (heldItem != null) {
+                RPGItem rpgItem = this.getRPGItem(heldItem);
+                if (rpgItem != null) {
+                    RPGPlayer rpgPlayer = this.getRPGManager().getEntityManager().get(event.getPlayer());
+                    RPGPlayerItemInteractBlockEvent rpgEvent = new RPGPlayerItemInteractBlockEvent(rpgPlayer, rpgItem, event.getClickedBlock());
+                    Bukkit.getPluginManager().callEvent(rpgEvent);
+                    if (rpgEvent.isCancelled()) {
+                        event.setCancelled(true);
+                        return;
+                    }
 
-                for (ItemComponent component : rpgItem.getItemType().getComponents()) {
-                    component.onItemBlockInteract(event.getPlayer(), event.getClickedBlock(), rpgItem);
+                    for (ItemComponent component : rpgItem.getItemType().getComponents()) {
+                        component.onItemBlockInteract(event.getPlayer(), event.getClickedBlock(), rpgItem);
+                    }
                 }
             }
         }
@@ -214,7 +216,6 @@ public class ItemManager implements Listener {
         if (rpgItem != null) {
             for (ItemComponent component : rpgItem.getItemType().getComponents()) {
                 component.onItemConsumption(event.getPlayer(), rpgItem);
-
             }
         }
     }
